@@ -227,51 +227,8 @@ public class SQLite implements iDriver {
 	@Override
 	public ArrayList<HashMap<String, String>> execQuery() {
 		Integer queryID = ((sql.size() - 1 > 0) ? (sql.size() - 1) : 0);
-		Statement st = null;
 		
-		ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-		try {
-			HashMap<String, String> SQL = sql.get(queryID);
-			if(SQL.containsKey("sql")) {
-				try {
-					st = con.createStatement();
-					//query.add(queryID, st.executeQuery(SQL.get("sql")));
-					ResultSet res = st.executeQuery(SQL.get("sql"));
-					while(res.next()) {
-						HashMap<String, String> row = new HashMap<String, String>();
-
-						ResultSetMetaData rsmd = res.getMetaData();
-						int columns = rsmd.getColumnCount();
-						for(int i = 1; i < columns + 1; i++) {
-							row.put(rsmd.getColumnName(i), res.getString(i));
-						}
-						data.add(row);
-					}
-				}catch (SQLException e) {
-					plugin.getLogger().log(Level.SEVERE, " Could not execute query!");
-					if(this.dbg) {
-						plugin.getLogger().log(Level.INFO, e.getMessage());
-						e.printStackTrace();
-					}
-				} finally {
-					try {
-						if(st != null) {
-							st.close();
-						}
-					}catch (Exception e) {
-						plugin.getLogger().log(Level.SEVERE, " Could not close database connection");
-						if(this.dbg) {
-							plugin.getLogger().log(Level.INFO, e.getMessage());
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-		}catch(NullPointerException e) {
-			plugin.getLogger().log(Level.SEVERE, "Query " + queryID.toString() + " could not be found!");
-		}
-		
-		return data;
+		return this.execQuery(queryID);
 	}
 	
 	@Override
@@ -326,37 +283,8 @@ public class SQLite implements iDriver {
 	@Override
 	public void updateQuery() {
 		Integer queryID = ((sql.size() - 1 > 0) ? (sql.size() - 1) : 0);
-		Statement st = null;
 		
-		try {
-			HashMap<String, String> SQL = sql.get(queryID);
-			if(SQL.containsKey("sql")) {
-				try {
-					st = con.createStatement();
-					st.executeUpdate(SQL.get("sql"));
-				}catch (SQLException e) {
-					plugin.getLogger().log(Level.SEVERE, " Could not execute query!");
-					if(this.dbg) {
-						plugin.getLogger().log(Level.INFO, e.getMessage());
-						e.printStackTrace();
-					}
-				} finally {
-					try {
-						if(st != null) {
-							st.close();
-						}
-					}catch (Exception e) {
-						plugin.getLogger().log(Level.SEVERE, " Could not close database connection");
-						if(this.dbg) {
-							plugin.getLogger().log(Level.INFO, e.getMessage());
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-		}catch(NullPointerException e) {
-			plugin.getLogger().log(Level.SEVERE, "Query " + queryID.toString() + " could not be found!");
-		}
+		this.updateQuery(queryID);
 	}
 	
 	@Override
