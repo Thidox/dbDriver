@@ -1,0 +1,7 @@
+name: dbExample
+main: nl.giantit.minecraft.dbExample.dbExample
+version: dbExample
+commands:
+    dbExample:
+        description: its a command!
+        usage: /dbExample
