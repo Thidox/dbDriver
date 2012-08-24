@@ -802,6 +802,7 @@ public class SQLite implements iDriver {
 			Integer length = 100;
 			Boolean NULL = false;
 			String def = "";
+			Boolean aincr = false;
 			Boolean pkey = false;
 			
 			if(data.containsKey("TYPE")) {
@@ -811,7 +812,7 @@ public class SQLite implements iDriver {
 			}
 			
 			if(data.containsKey("LENGTH")) {
-				if(null != data.get("LENGTH")) {
+				if(null != data.get("LENGTH") && !type.equals("INTEGER")) {
 					try{
 						length = Integer.parseInt(data.get("LENGTH"));
 						length = length < 0 ? 100 : length;
@@ -828,6 +829,10 @@ public class SQLite implements iDriver {
 				def = data.get("DEFAULT");
 			}
 			
+			if(data.containsKey("A_INCR")) {
+				aincr = Boolean.parseBoolean(data.get("A_INCR"));
+			}
+			
 			if(data.containsKey("P_KEY")) {
 				pkey = Boolean.parseBoolean(data.get("P_KEY"));
 			}
@@ -835,12 +840,16 @@ public class SQLite implements iDriver {
 			if(length != null)
 				type += "(" + length + ")";
 			
-			String n = (!NULL) ? " NOT NULL" : " DEFAULT NULL";
+			String n = "";
+			if(!aincr)
+				n = (!NULL) ? " NOT NULL" : " DEFAULT NULL";
+			
 			String d = (!def.equalsIgnoreCase("")) ? " DEFAULT " + def : ""; 
-			String a = (pkey) ? " PRIMARY KEY" : "";
+			String p = (pkey) ? " PRIMARY KEY" : "";
+			String a = (aincr) ? " AUTOINCREMENT" : "";
 			String c = (i < fields.size()) ? ",\n" : ""; 
 			
-			this.buildQuery(field + " " + type + n + d + a + c, true);
+			this.buildQuery(field + " " + type + n + d + p + a + c, true);
 		}
 		
 		this.buildQuery(");", true, false, false);
