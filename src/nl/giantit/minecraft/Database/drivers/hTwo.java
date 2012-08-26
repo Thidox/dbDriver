@@ -111,36 +111,41 @@ public class hTwo implements iDriver {
 
 	@Override
 	public void buildQuery(String string, Boolean add) {
-		this.buildQuery(string, false);
+		this.buildQuery(string, add, false);
 	}
 
 	@Override
 	public void buildQuery(String string, Boolean add, Boolean finalize) {
-		this.buildQuery(string, false);
+		this.buildQuery(string, add, finalize, false);
 	}
 
 	@Override
 	public void buildQuery(String string, Boolean add, Boolean finalize, Boolean debug) {
-		this.buildQuery(string, false);
+		this.buildQuery(string, add, finalize, debug, false);
 	}
 
 	@Override
 	public void buildQuery(String string, Boolean add, Boolean finalize, Boolean debug, Boolean table) {
-		this.buildQuery(string, false);
-	}
-
-	@Override
-	public void buildQuery(String string, Integer add) {
-
-	}
-
-	@Override
-	public void buildQuery(String string, Integer add, Boolean finalize) {
 		
 	}
 
 	@Override
+	public void buildQuery(String string, Integer add) {
+		this.buildQuery(string, add, false);
+	}
+
+	@Override
+	public void buildQuery(String string, Integer add, Boolean finalize) {
+		this.buildQuery(string, add, finalize, false);
+	}
+
+	@Override
 	public void buildQuery(String string, Integer add, Boolean finalize, Boolean debug) {
+		this.buildQuery(string, add, finalize, debug, false);
+	}
+
+	@Override
+	public void buildQuery(String string, Integer add, Boolean finalize, Boolean debug, Boolean table) {
 		
 	}
 
