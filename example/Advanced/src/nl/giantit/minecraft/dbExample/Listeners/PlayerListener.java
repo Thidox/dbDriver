@@ -92,7 +92,7 @@ public class PlayerListener implements Listener {
 				values.put(i, value);
 			}
 			
-			db.insert("#__playerData", fields, values);
+			db.insert("#__playerData", fields, values).updateQuery();
 			
 			// We are going to have to insert!
 		}else{
@@ -103,7 +103,7 @@ public class PlayerListener implements Listener {
 			data.put("data", "stepsMade + 1"); // Make the database increment the current value of column stepsMade by 1
 			fields.put("stepsMade", data);
 			
-			db.update("#__playerData").set(fields, true);
+			db.update("#__playerData").set(fields, true).updateQuery();
 			// We can update!
 		}
 	}
@@ -130,6 +130,8 @@ public class PlayerListener implements Listener {
 		// We don't want to work with a cancelled event!
 		if(e.isCancelled())
 			return;
+		
+		plugin.getLogger().severe("test");
 		
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			
