@@ -76,7 +76,7 @@ public class PlayerListener implements Listener {
 		if(!this.checkPlayerExists(p)) {
 			ArrayList<String> fields = new ArrayList<String>();
 			fields.add("player");
-			fields.add("stepsMade");
+			fields.add("movesMade");
 			
 			HashMap<Integer, HashMap<String, String>> values = new HashMap<Integer, HashMap<String, String>>();
 			for(int i = 0; i < fields.size(); i++) {
@@ -84,7 +84,7 @@ public class PlayerListener implements Listener {
 				String field = fields.get(i);
 				if(field.equalsIgnoreCase("player")) {
 					value.put("data", p.getName());
-				}else if(field.equalsIgnoreCase("stepsMade")) {
+				}else if(field.equalsIgnoreCase("movesMade")) {
 					value.put("kind", "INT");
 					value.put("data", "1");
 				}
@@ -100,8 +100,8 @@ public class PlayerListener implements Listener {
 			HashMap<String, String> data = new HashMap<String, String>();
 			
 			data.put("kind", "INT"); // Hacky way of making it raw
-			data.put("data", "stepsMade + 1"); // Make the database increment the current value of column stepsMade by 1
-			fields.put("stepsMade", data);
+			data.put("data", "movesMade + 1"); // Make the database increment the current value of column stepsMade by 1
+			fields.put("movesMade", data);
 			
 			db.update("#__playerData").set(fields, true).updateQuery();
 			// We can update!
@@ -130,8 +130,6 @@ public class PlayerListener implements Listener {
 		// We don't want to work with a cancelled event!
 		if(e.isCancelled())
 			return;
-		
-		plugin.getLogger().severe("test");
 		
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			

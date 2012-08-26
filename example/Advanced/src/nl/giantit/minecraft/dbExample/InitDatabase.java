@@ -96,7 +96,7 @@ public class InitDatabase {
 			data.put("NULL", "false");
 			data.put("DEFAULT", "0");
 			
-			fields.put("stepsMade", data);
+			fields.put("movesMade", data);
 			
 			data = new HashMap<String, String>();
 			data.put("TYPE", "INT"); // Internally converted to INTEGER for SQLite
