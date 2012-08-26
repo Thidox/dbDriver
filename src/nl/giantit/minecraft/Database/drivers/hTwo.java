@@ -126,7 +126,25 @@ public class hTwo implements iDriver {
 
 	@Override
 	public void buildQuery(String string, Boolean add, Boolean finalize, Boolean debug, Boolean table) {
-		
+		if(!add) {
+			if(table)
+				string = string.replace("#__", prefix);
+			
+			HashMap<String, String> ad = new HashMap<String, String>();
+			ad.put("sql", string);
+			
+			if(finalize)
+				ad.put("finalize", "true");
+			
+			if(debug)
+				ad.put("debug", "true");
+			
+			sql.add(ad);
+		}else{
+			int last = sql.size() - 1;
+			
+			this.buildQuery(string, last, finalize, debug, table);
+		}
 	}
 
 	@Override
@@ -146,7 +164,34 @@ public class hTwo implements iDriver {
 
 	@Override
 	public void buildQuery(String string, Integer add, Boolean finalize, Boolean debug, Boolean table) {
+		if(table)
+			string = string.replace("#__", prefix);
 		
+		try {
+			HashMap<String, String> SQL = sql.get(add);
+			if(SQL.containsKey("sql")) {
+				if(SQL.containsKey("finalize")) {
+					if(true == debug)
+						plugin.getLogger().log(Level.SEVERE, " SQL syntax is finalized!");
+					return;
+				}else{
+					SQL.put("sql", SQL.get("sql") + string);
+					
+					if(true == finalize)
+						SQL.put("finalize", "true");
+
+					sql.add(add, SQL);
+				}
+			}else
+				if(true == debug)
+					plugin.getLogger().log(Level.SEVERE, add.toString() + " is not a valid SQL query!");
+		
+			if(debug == true)
+				plugin.getLogger().log(Level.INFO, sql.get(add).get("sql"));
+		}catch(NullPointerException e) {
+			if(true == debug)
+				plugin.getLogger().log(Level.SEVERE, "Query " + add.toString() + " could not be found!");
+		}
 	}
 
 	@Override
