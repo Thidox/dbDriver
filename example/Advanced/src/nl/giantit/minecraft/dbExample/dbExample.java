@@ -18,6 +18,27 @@ public class dbExample extends JavaPlugin {
 
 	private Database dbDriver;
 	
+	private HashMap<String, Integer> getPlayerData(Player p) {
+		iDriver db = this.dbDriver.getEngine();
+		HashMap<String, Integer> data = new HashMap<String, Integer>();
+		
+		HashMap<String, String> where = new HashMap<String, String>();
+		where.put("player", p.getName());
+		
+		ArrayList<HashMap<String, String>> resSet = db.select("timesClicked", "blocksBroken", "movesMade").from("#__playerData").where(where).execQuery();
+		
+		if(resSet.size() > 0) {
+			HashMap<String, String> res = resSet.get(0);
+			data.put("timesClicked", Integer.valueOf(res.get("timesClicked")));
+			data.put("blocksBroken", Integer.valueOf(res.get("blocksBroken")));
+			data.put("movesMade", Integer.valueOf(res.get("movesMade")));
+			
+			return data;
+		}
+		
+		// Player not found!
+		return null;
+	}
 	
 	@Override
 	public void onEnable() {
@@ -56,61 +77,30 @@ public class dbExample extends JavaPlugin {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+		if(!(sender instanceof Player)) {
+			sender.sendMessage("Sorry, this command only works as a player! :(");
+			return true;
+		}
+		
+		Player p = (Player) sender;
+		
 		if(args.length == 0) {
-			Boolean isLucky;
-			
-			HashMap<String, String> where = new HashMap<String, String>();
-			where.put("player", sender.getName());
-			
-			ArrayList<HashMap<String, String>> resSet = this.dbDriver.getEngine().select("lucky").from("#__playerData").where(where).execQuery();
-			if(resSet.size() > 0) {
-				HashMap<String, String> res = resSet.get(0);
-				isLucky = res.get("lucky").equals("1");
+			HashMap<String, Integer> data = this.getPlayerData(p);
+			if(null != data) {
+				sender.sendMessage("You have moved " + String.valueOf(data.get("movesMade")) + " times!");
+				sender.sendMessage("You have clicked " + String.valueOf(data.get("timesClicked")) + " times!");
+				sender.sendMessage("You have broken " + String.valueOf(data.get("blocksBroken")) + " blocks!");
+				
+				sender.sendMessage("Type /dbExample reset to reset your data!");
 			}else{
-				Random rand = new Random();
-				int x = rand.nextInt(10) > 5 ? 1 : 0;
-
-				ArrayList<String> fields = new ArrayList<String>();
-				fields.add("player");
-				fields.add("lucky");
-				
-				HashMap<Integer, HashMap<String, String>> values = new HashMap<Integer, HashMap<String, String>>();
-				
-				for(int i = 0; i < fields.size(); i++) {
-					HashMap<String, String> value = new HashMap<String, String>();
-					String field = fields.get(i);
-					if(field.equalsIgnoreCase("player")) {
-						value.put("data", sender.getName());
-					}else if(field.equalsIgnoreCase("lucky")) {
-						value.put("kind", "INT");
-						value.put("data", String.valueOf(x));
-					}
-					
-					values.put(i, value);
-				}
-				
-				this.dbDriver.getEngine().insert("#__playerData", fields, values).Finalize().updateQuery();
-				
-				isLucky = x == 1;
-			}
-			
-			if(isLucky) {
-				sender.sendMessage("You are lucky!");
-			}else{
-				sender.sendMessage("Sorry, you are not lucky! :(");
-			}
-			
-			if(sender instanceof Player) {
-				sender.sendMessage("type /dbExample reset to try again!");
-			}else{
-				sender.sendMessage("type dbExample reset to try again!");
+				sender.sendMessage("Sorry, no data for you yet, try moving around!");
 			}
 		}else{
 			HashMap<String, String> where = new HashMap<String, String>();
 			where.put("player", sender.getName());
 			
 			this.dbDriver.getEngine().delete("#__playerData").where(where).updateQuery();
-			sender.sendMessage("Your luckyness has been reset!");
+			sender.sendMessage("Your statistics have been reset!");
 		}
 					
 		
