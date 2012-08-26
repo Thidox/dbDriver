@@ -226,6 +226,11 @@ public class SQLite implements iDriver {
 	}
 	
 	@Override
+	public void buildQuery(String string, Integer add, Boolean finalize, Boolean debug, Boolean table) {
+		
+	}
+	
+	@Override
 	public ArrayList<HashMap<String, String>> execQuery() {
 		Integer queryID = ((sql.size() - 1 > 0) ? (sql.size() - 1) : 0);
 		
