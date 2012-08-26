@@ -113,19 +113,19 @@ public class SQLite implements iDriver {
 	
 	@Override
 	public void buildQuery(String string) {
-		buildQuery(string, false, false, false);
+		this.buildQuery(string, false, false, false);
 		return;
 	}
 	
 	@Override
 	public void buildQuery(String string, Boolean add) {
-		buildQuery(string, add, false, false);
+		this.buildQuery(string, add, false, false);
 		return;
 	}
 	
 	@Override
 	public void buildQuery(String string, Boolean add, Boolean finalize) {
-		buildQuery(string, add, finalize, false);
+		this.buildQuery(string, add, finalize, false);
 		return;
 	}
 	
@@ -136,65 +136,46 @@ public class SQLite implements iDriver {
 	
 	@Override
 	public void buildQuery(String string, Boolean add, Boolean finalize, Boolean debug, Boolean table) {
-		int last = sql.size();
-		if(table)
-			string = string.replace("#__", prefix);
-		
-		if(false == add) {
+		if(!add) {
+			if(table)
+				string = string.replace("#__", prefix);
+			
 			HashMap<String, String> ad = new HashMap<String, String>();
 			ad.put("sql", string);
+			
+			if(finalize)
+				ad.put("finalize", "true");
+			
+			if(debug)
+				ad.put("debug", "true");
+			
 			sql.add(ad);
-			
-			if(debug == true)
-				plugin.getLogger().log(Level.INFO, sql.get(last).get("sql"));
 		}else{
-			last = sql.size() - 1;
-			try {
-				HashMap<String, String> SQL = sql.get(last);
-				if(SQL.containsKey("sql")) {
-					if(SQL.containsKey("finalize")) {
-						if(true == debug)
-							plugin.getLogger().log(Level.SEVERE, " SQL syntax is finalized!");
-						return;
-					}else{
-						SQL.put("sql", SQL.get("sql") + string);
-
-						if(true == finalize)
-							SQL.put("finalize", "true");
-
-						sql.add(last, SQL);
-					}
-				}else
-					if(true == debug)
-						plugin.getLogger().log(Level.SEVERE, last + " is not a valid SQL query!");
-				
-				if(debug == true)
-					plugin.getLogger().log(Level.INFO, sql.get(last).get("sql"));
-			}catch(NullPointerException e) {
-				if(true == debug)
-					plugin.getLogger().log(Level.SEVERE, "Query " + last + " could not be found!");
-			}
-		}
+			int last = sql.size() - 1;
 			
-		return;
+			this.buildQuery(string, last, finalize, debug, table);
+		}
 	}
 	
 	@Override
 	public void buildQuery(String string, Integer add) {
-		buildQuery(string, add, false, false);
-		return;
+		this.buildQuery(string, add, false, false);
 	}
 	
 	@Override
 	public void buildQuery(String string, Integer add, Boolean finalize) {
-		buildQuery(string, add, finalize, false);
-		return;
+		this.buildQuery(string, add, finalize, false);
 	}
 	
 	@Override
 	public void buildQuery(String string, Integer add, Boolean finalize, Boolean debug) {
-		int last = sql.size();
-		string = string.replace("#__", prefix);
+		this.buildQuery(string, add, finalize, debug, false);
+	}
+	
+	@Override
+	public void buildQuery(String string, Integer add, Boolean finalize, Boolean debug, Boolean table) {
+		if(table)
+			string = string.replace("#__", prefix);
 		
 		try {
 			HashMap<String, String> SQL = sql.get(add);
@@ -216,18 +197,11 @@ public class SQLite implements iDriver {
 					plugin.getLogger().log(Level.SEVERE, add.toString() + " is not a valid SQL query!");
 		
 			if(debug == true)
-				plugin.getLogger().log(Level.INFO, sql.get(last).get("sql"));
+				plugin.getLogger().log(Level.INFO, sql.get(add).get("sql"));
 		}catch(NullPointerException e) {
 			if(true == debug)
 				plugin.getLogger().log(Level.SEVERE, "Query " + add.toString() + " could not be found!");
 		}
-		
-		return;
-	}
-	
-	@Override
-	public void buildQuery(String string, Integer add, Boolean finalize, Boolean debug, Boolean table) {
-		
 	}
 	
 	@Override
