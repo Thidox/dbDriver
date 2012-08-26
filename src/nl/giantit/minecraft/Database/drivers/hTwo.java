@@ -593,12 +593,10 @@ public class hTwo implements iDriver {
 			
 			if(data.containsKey("TYPE")) {
 				type = data.get("TYPE");
-				if(type.equalsIgnoreCase("INT"))
-					type = "INTEGER";
 			}
 			
 			if(data.containsKey("LENGTH")) {
-				if(null != data.get("LENGTH") && !type.equals("INTEGER")) {
+				if(null != data.get("LENGTH") && (!type.equals("INT") && aincr)) {
 					try{
 						length = Integer.parseInt(data.get("LENGTH"));
 						length = length < 0 ? 100 : length;
@@ -666,8 +664,6 @@ public class hTwo implements iDriver {
 			
 			if(data.containsKey("TYPE")) {
 				type = data.get("TYPE");
-				if(type.equalsIgnoreCase("INT"))
-					type = "INTEGER";
 			}
 			
 			if(data.containsKey("LENGTH")) {
