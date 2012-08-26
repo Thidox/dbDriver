@@ -79,7 +79,7 @@ public class InitDatabase {
 			
 			data = new HashMap<String, String>();
 			
-			data.put("TYPE", "VARCHAR"); // Internally converted to INTEGER for SQLite
+			data.put("TYPE", "VARCHAR");
 			data.put("LENGTH", "100");
 			data.put("NULL", "false");
 			
