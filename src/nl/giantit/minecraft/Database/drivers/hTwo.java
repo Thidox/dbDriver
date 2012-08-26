@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 public class hTwo implements iDriver {
@@ -296,147 +297,433 @@ public class hTwo implements iDriver {
 
 	@Override
 	public iDriver select(String field) {
-		
-		return null;
+		ArrayList<String> fields = new ArrayList<String>();
+		fields.add(field);
+		return this.select(fields);
 	}
-
+	
 	@Override
 	public iDriver select(String... fields) {
-		
-		return null;
-	}
+		ArrayList<String> f = new ArrayList<String>();
+		if(fields.length > 0) {
+			for(String field : fields) { 
+				f.add(field);
+			}
+		}
 
+		return this.select(f);
+	}
+	
 	@Override
 	public iDriver select(ArrayList<String> fields) {
+		if(fields.size() > 0) {
+			String SQL = "SELECT ";
+			int i = 0;
+			for(String field : fields) {
+				if(i > 0)
+					SQL += ", ";
+				
+				SQL += field;
+				i++;
+			}
+			
+			this.buildQuery(SQL + " \n", false, false, false);
+		}
 		
-		return null;
+		return this;
 	}
 
 	@Override
 	public iDriver select(HashMap<String, String> fields) {
+		if(fields.size() > 0) {
+			String SQL = "SELECT ";
+			int i = 0;
+			for(Map.Entry<String, String> field : fields.entrySet()) {
+				if(i > 0)
+					SQL += ", ";
+				
+				SQL += field.getKey() + " AS " + field.getValue();
+				i++;
+			}
+			
+			this.buildQuery(SQL + " \n", false, false, false);
+		}
 		
-		return null;
+		return this;
 	}
-
+	
 	@Override
 	public iDriver from(String table) {
+		table = table.replace("#__", prefix);
+		this.buildQuery("FROM " + table + " \n", true, false, false);
 		
-		return null;
+		return this;
 	}
 
 	@Override
 	public iDriver where(HashMap<String, String> fields) {
+		if(fields.size() > 0) {
+			String SQL = "WHERE ";
+			int i = 0;
+			
+			for(Map.Entry<String, String> field : fields.entrySet()) {
+				if(i > 0)
+					SQL += " AND ";
+				
+				SQL += field.getKey() + "='" + field.getValue() + "'";
+				i++;
+			}
+			
+			this.buildQuery(SQL + " \n", true, false, false);
+		}
 		
-		return null;
+		return this;
 	}
-
+	
 	@Override
-	public iDriver where(HashMap<String, HashMap<String, String>> fields,
-			Boolean shite) {
+	public iDriver where(HashMap<String, HashMap<String, String>> fields, Boolean shite) {
+		if(fields.size() > 0) {
+			String SQL = "WHERE ";
+			int i = 0;
+			
+			for(Map.Entry<String, HashMap<String, String>> field : fields.entrySet()) {
+				String type = (field.getValue().containsKey("type") && field.getValue().get("type").equalsIgnoreCase("OR")) ? "OR" : "AND";
+				if(i > 0)
+					SQL += " " + type + " ";
+				
+				if(field.getValue().containsKey("kind") && field.getValue().get("kind").equals("int")) {
+					SQL += field.getKey() + "=" + field.getValue().get("data");
+				}else if(field.getValue().containsKey("kind") && field.getValue().get("kind").equalsIgnoreCase("NULL")) {
+					SQL += field.getKey() + " IS NULL";
+				}else if(field.getValue().containsKey("kind") && field.getValue().get("kind").equalsIgnoreCase("NOTNULL")) {
+					SQL += field.getKey() + " IS NOT NULL";
+				}else if(field.getValue().containsKey("kind") && field.getValue().get("kind").equalsIgnoreCase("NOT")) {
+					SQL += field.getKey() + "!='" + field.getValue().get("data")+"'";
+				}else
+					SQL += field.getKey() + "='" + field.getValue().get("data")+"'";
+				
+				i++;
+			}
+			
+			this.buildQuery(SQL + " \n", true, false, false);
+		}
 		
-		return null;
+		return this;
 	}
-
+	
 	@Override
 	public iDriver orderBy(HashMap<String, String> fields) {
+		if(fields.size() > 0) {
+			String SQL = "ORDER BY ";
+			int i = 0;
+			
+			for(Map.Entry<String, String> field : fields.entrySet()) {
+				if(i > 0)
+					SQL += ", ";
+				
+				SQL += field.getKey() + " " + ((field.getValue().equalsIgnoreCase("ASC")) ? "ASC" : "DESC");
+				i++;
+			}
+			
+			this.buildQuery(SQL + " \n", true, false, false);
+		}
 		
-		return null;
+		return this;
 	}
-
+	
 	@Override
 	public iDriver limit(int limit) {
-		
-		return null;
+		return this.limit(limit, null);
 	}
-
+	
 	@Override
 	public iDriver limit(int limit, Integer start) {
-		
-		return null;
-	}
-
-	@Override
-	public iDriver update(String table) {
-		
-		return null;
-	}
-
-	@Override
-	public iDriver set(HashMap<String, String> fields) {
-		
-		return null;
-	}
-
-	@Override
-	public iDriver set(HashMap<String, HashMap<String, String>> fields, Boolean shite) {
-		
-		return null;
+		this.buildQuery("LIMIT " + ((start != null) ? start + ", " + limit : limit) + " \n", true, false, false);
+		return this;
 	}
 
 	@Override
 	public iDriver insert(String table, ArrayList<String> fields, HashMap<Integer, HashMap<String, String>> values) {
+		ArrayList<HashMap<Integer, HashMap<String, String>>> t = new ArrayList<HashMap<Integer, HashMap<String, String>>>();
+		t.add(values);
+		this.insert(table, fields, t);
 		
-		return null;
+		return this;
 	}
-
+	
 	@Override
 	public iDriver insert(String table, ArrayList<String> fields, ArrayList<HashMap<Integer, HashMap<String, String>>> values) {
+		table = table.replace("#__", prefix);
+		this.buildQuery("INSERT INTO " + table + " \n", false, false, false);
 		
-		return null;
+		if(fields.size() > 0) {
+			String insFields = "(";
+			int i = 0;
+			for(String field : fields) {
+				if(i > 0)
+					insFields += ", ";
+				
+				insFields += field;
+				i++;
+			}
+			
+			insFields += ") \n";
+			this.buildQuery(insFields, true, false, false);
+		}
+		
+		this.buildQuery(" SELECT ", true, false, false);
+		String insValues = "";
+		int i = 0;
+		for(HashMap<Integer, HashMap<String, String>> value : values) {
+			if(i > 0)
+				insValues += "UNION SELECT ";
+			
+			int a = 0;
+			for(Map.Entry<Integer, HashMap<String, String>> val : value.entrySet()) {
+				if(a > 0)
+					insValues += ", ";
+				
+				a++;
+				if(val.getValue().containsKey("kind") && val.getValue().get("kind").equalsIgnoreCase("INT")) {
+					insValues += val.getValue().get("data");
+				}else
+					insValues += "'" + val.getValue().get("data") + "'";
+			}
+			
+			i++;
+			insValues += (i < values.size()) ? "\n" : "";
+		}
+		this.buildQuery(insValues, true, false, false);
+		
+		return this;
 	}
-
+	
+	@Override
+	public iDriver update(String table) {
+		table = table.replace("#__", prefix);
+		this.buildQuery("UPDATE " + table + " \n", false, false, false);
+		
+		return this;
+	}
+	
+	@Override
+	public iDriver set(HashMap<String, String> fields) {
+		if(fields.size() > 0) {
+			String SQL = "SET ";
+			int i = 0;
+			
+			for(Map.Entry<String, String> field : fields.entrySet()) {
+				if(i > 0)
+					SQL += ", ";
+				
+				SQL += field.getKey() + "='" + field.getValue() + "'";
+				i++;
+			}
+			
+			this.buildQuery(SQL + " \n", true, false, false);
+		}
+		
+		return this;
+	}
+	
+	@Override
+	public iDriver set(HashMap<String, HashMap<String, String>> fields, Boolean shite) {
+		if(fields.size() > 0) {
+			String SQL = "SET ";
+			int i = 0;
+			
+			for(Map.Entry<String, HashMap<String, String>> field : fields.entrySet()) {
+				if(i > 0)
+					SQL += ", ";
+				
+				if(field.getValue().containsKey("kind") && field.getValue().get("kind").equalsIgnoreCase("INT")) {
+					SQL += field.getKey() + "=" + field.getValue().get("data");
+				}else
+					SQL += field.getKey() + "='" + field.getValue().get("data") + "'";
+				
+				i++;
+			}
+			
+			this.buildQuery(SQL + " \n", true, false, false);
+		}
+		
+		return this;
+	}
+	
 	@Override
 	public iDriver delete(String table) {
+		table = table.replace("#__", prefix);
+		this.buildQuery("DELETE FROM " + table + " \n", false, false, false);
 		
-		return null;
+		return this;
 	}
-
+	
 	@Override
 	public iDriver Truncate(String table) {
+		table = table.replace("#__", prefix);
+		this.buildQuery("DELETE FROM " + table + ";", false, false, false);
 		
-		return null;
+		return this;
 	}
-
+	
 	@Override
 	public iDriver create(String table) {
+		table = table.replace("#__", prefix);
+		this.buildQuery("CREATE TABLE " + table + "\n", false, false, false);
 		
-		return null;
+		return this;
 	}
-
+	
 	@Override
 	public iDriver fields(HashMap<String, HashMap<String, String>> fields) {
+		this.buildQuery("(", true, false, false);
 		
-		return null;
+		int i = 0;
+		for(Map.Entry<String, HashMap<String, String>> entry : fields.entrySet()) {
+			i++;
+			HashMap<String, String> data = entry.getValue();
+			
+			String field = entry.getKey();
+			String type = "VARCHAR";
+			Integer length = 100;
+			Boolean NULL = false;
+			String def = "";
+			Boolean aincr = false;
+			Boolean pkey = false;
+			
+			if(data.containsKey("TYPE")) {
+				type = data.get("TYPE");
+				if(type.equalsIgnoreCase("INT"))
+					type = "INTEGER";
+			}
+			
+			if(data.containsKey("LENGTH")) {
+				if(null != data.get("LENGTH") && !type.equals("INTEGER")) {
+					try{
+						length = Integer.parseInt(data.get("LENGTH"));
+						length = length < 0 ? 100 : length;
+					}catch(NumberFormatException e) {}
+				}else
+					length = null;
+			}
+			
+			if(data.containsKey("NULL")) {
+				NULL = Boolean.parseBoolean(data.get("NULL"));
+			}
+			
+			if(data.containsKey("DEFAULT")) {
+				def = data.get("DEFAULT");
+			}
+			
+			if(data.containsKey("A_INCR")) {
+				aincr = Boolean.parseBoolean(data.get("A_INCR"));
+			}
+			
+			if(data.containsKey("P_KEY")) {
+				pkey = Boolean.parseBoolean(data.get("P_KEY"));
+			}
+			
+			if(length != null)
+				type += "(" + length + ")";
+			
+			String n = "";
+			if(!aincr)
+				n = (!NULL) ? " NOT NULL" : " DEFAULT NULL";
+			
+			String d = (!def.equalsIgnoreCase("")) ? " DEFAULT " + def : ""; 
+			String p = (pkey) ? " PRIMARY KEY" : "";
+			String a = (aincr) ? " AUTOINCREMENT" : "";
+			String c = (i < fields.size()) ? ",\n" : ""; 
+			
+			this.buildQuery(field + " " + type + n + d + p + a + c, true);
+		}
+		
+		this.buildQuery(");", true, false, false);
+		
+		return this;
 	}
 
 	@Override
 	public iDriver alter(String table) {
+		table = table.replace("#__", prefix);
+		this.buildQuery("ALTER TABLE " + table + "\n", false, false, false);
 		
-		return null;
+		return this;
 	}
-
+	
 	@Override
 	public iDriver add(HashMap<String, HashMap<String, String>> fields) {
+		int i = 0;
+		for(Map.Entry<String, HashMap<String, String>> entry : fields.entrySet()) {
+			i++;
+			HashMap<String, String> data = entry.getValue();
+			
+			String field = entry.getKey();
+			String type = "VARCHAR";
+			Integer length = 100;
+			Boolean NULL = false;
+			String def = "";
+			
+			if(data.containsKey("TYPE")) {
+				type = data.get("TYPE");
+				if(type.equalsIgnoreCase("INT"))
+					type = "INTEGER";
+			}
+			
+			if(data.containsKey("LENGTH")) {
+				if(null != data.get("LENGTH")) {
+					try{
+						length = Integer.parseInt(data.get("LENGTH"));
+						length = length < 0 ? 100 : length;
+					}catch(NumberFormatException e) {}
+				}else
+					length = null;
+			}
+			
+			if(data.containsKey("NULL")) {
+				NULL = Boolean.parseBoolean(data.get("NULL"));
+			}
+			
+			if(data.containsKey("DEFAULT")) {
+				def = data.get("DEFAULT");
+			}
+			
+			if(length != null)
+				type += "(" + length + ")";
+			
+			String n = (!NULL) ? " NOT NULL" : " DEFAULT NULL";
+			String d = (!def.equalsIgnoreCase("")) ? " DEFAULT " + def : "";
+			String c = (i < fields.size()) ? ",\n" : ""; 
+			
+			this.buildQuery("ADD " + field + " " + type + n + d + c, true);
+		}
 		
-		return null;
+		return this;
 	}
-
+	
 	@Override
 	public iDriver debug(Boolean dbg) {
-		
-		return null;
+		this.buildQuery("", true, false, dbg);
+		return this;
 	}
-
+	
 	@Override
 	public iDriver Finalize() {
-		
-		return null;
+		this.buildQuery("", true, true, false);
+		return this;
 	}
-
+	
 	@Override
 	public iDriver debugFinalize(Boolean dbg) {
+		this.buildQuery("", true, true, dbg);
+		return this;
+	}
+	
+	public static hTwo Obtain(Plugin p, HashMap<String, String> conf, String instance) {
+		if(!hTwo.instance.containsKey(instance))
+			hTwo.instance.put(instance, new hTwo(p, conf));
 		
-		return null;
+		return hTwo.instance.get(instance);
 	}
 
 }
