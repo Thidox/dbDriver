@@ -2,6 +2,7 @@ package nl.giantit.minecraft.Database;
 
 import nl.giantit.minecraft.Database.drivers.MySQL;
 import nl.giantit.minecraft.Database.drivers.SQLite;
+import nl.giantit.minecraft.Database.drivers.hTwo;
 import nl.giantit.minecraft.Database.drivers.iDriver;
 
 import org.bukkit.plugin.Plugin;
@@ -16,6 +17,7 @@ public class Database {
 	
 	private enum dbType {
 		MySQL("MySQL"),
+		hTwo("h2"),
 		SQLite("SQLite");
 		
 		String value;
@@ -38,9 +40,14 @@ public class Database {
 		if(instance == null)
 			instance = "0";
 		
-		if(conf.get("driver").equalsIgnoreCase("MySQL")) {
+		String d = conf.get("driver");
+		
+		if(d.equalsIgnoreCase("MySQL")) {
 			t = dbType.MySQL;
 			this.dbDriver = MySQL.Obtain(p, conf, instance);
+		}else if(d.equalsIgnoreCase("h2")) {
+			t = dbType.hTwo;
+			this.dbDriver = hTwo.Obtain(p, conf, instance);
 		}else{
 			t = dbType.SQLite;
 			this.dbDriver = SQLite.Obtain(p, conf, instance);
