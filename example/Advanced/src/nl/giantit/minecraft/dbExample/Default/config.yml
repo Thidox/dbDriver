@@ -1,0 +1,11 @@
+Advanced:
+    installed: true
+    db:
+        debug: true
+        driver: SQLite
+        database: dbExample
+        prefix: adv_
+        host: localhost
+        port: 3306
+        user: root
+        password: 
