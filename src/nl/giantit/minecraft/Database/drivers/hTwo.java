@@ -294,7 +294,7 @@ public class hTwo implements iDriver {
 			plugin.getLogger().log(Level.SEVERE, "Query " + queryID.toString() + " could not be found!");
 		}
 	}
-
+	
 	@Override
 	public iDriver select(String field) {
 		ArrayList<String> fields = new ArrayList<String>();
@@ -332,7 +332,7 @@ public class hTwo implements iDriver {
 		
 		return this;
 	}
-
+	
 	@Override
 	public iDriver select(HashMap<String, String> fields) {
 		if(fields.size() > 0) {
@@ -359,7 +359,7 @@ public class hTwo implements iDriver {
 		
 		return this;
 	}
-
+	
 	@Override
 	public iDriver where(HashMap<String, String> fields) {
 		if(fields.size() > 0) {
@@ -441,7 +441,7 @@ public class hTwo implements iDriver {
 		this.buildQuery("LIMIT " + ((start != null) ? start + ", " + limit : limit) + " \n", true, false, false);
 		return this;
 	}
-
+	
 	@Override
 	public iDriver insert(String table, ArrayList<String> fields, HashMap<Integer, HashMap<String, String>> values) {
 		ArrayList<HashMap<Integer, HashMap<String, String>>> t = new ArrayList<HashMap<Integer, HashMap<String, String>>>();
@@ -471,13 +471,11 @@ public class hTwo implements iDriver {
 			this.buildQuery(insFields, true, false, false);
 		}
 		
-		this.buildQuery(" SELECT ", true, false, false);
+		this.buildQuery(" VALUES \n", true, false, false);
 		String insValues = "";
 		int i = 0;
 		for(HashMap<Integer, HashMap<String, String>> value : values) {
-			if(i > 0)
-				insValues += "UNION SELECT ";
-			
+			insValues += "(";
 			int a = 0;
 			for(Map.Entry<Integer, HashMap<String, String>> val : value.entrySet()) {
 				if(a > 0)
@@ -491,7 +489,7 @@ public class hTwo implements iDriver {
 			}
 			
 			i++;
-			insValues += (i < values.size()) ? "\n" : "";
+			insValues += (i < values.size()) ? "), \n" : ");";
 		}
 		this.buildQuery(insValues, true, false, false);
 		
@@ -561,11 +559,11 @@ public class hTwo implements iDriver {
 	@Override
 	public iDriver Truncate(String table) {
 		table = table.replace("#__", prefix);
-		this.buildQuery("DELETE FROM " + table + ";", false, false, false);
+		this.buildQuery("TRUNCATE TABLE " + table + ";", false, false, false);
 		
 		return this;
 	}
-	
+
 	@Override
 	public iDriver create(String table) {
 		table = table.replace("#__", prefix);
@@ -576,6 +574,7 @@ public class hTwo implements iDriver {
 	
 	@Override
 	public iDriver fields(HashMap<String, HashMap<String, String>> fields) {
+		String P_KEY = "";
 		this.buildQuery("(", true, false, false);
 		
 		int i = 0;
@@ -589,14 +588,13 @@ public class hTwo implements iDriver {
 			Boolean NULL = false;
 			String def = "";
 			Boolean aincr = false;
-			Boolean pkey = false;
 			
 			if(data.containsKey("TYPE")) {
 				type = data.get("TYPE");
 			}
 			
 			if(data.containsKey("LENGTH")) {
-				if(null != data.get("LENGTH") && (!type.equals("INT") && aincr)) {
+				if(null != data.get("LENGTH")) {
 					try{
 						length = Integer.parseInt(data.get("LENGTH"));
 						length = length < 0 ? 100 : length;
@@ -618,25 +616,26 @@ public class hTwo implements iDriver {
 			}
 			
 			if(data.containsKey("P_KEY")) {
-				pkey = Boolean.parseBoolean(data.get("P_KEY"));
+				if(Boolean.parseBoolean(data.get("P_KEY"))) {
+					P_KEY = field;
+				}
 			}
 			
 			if(length != null)
 				type += "(" + length + ")";
 			
-			String n = "";
-			if(!aincr)
-				n = (!NULL) ? " NOT NULL" : " DEFAULT NULL";
-			
+			String n = (!NULL) ? " NOT NULL" : " DEFAULT NULL";
 			String d = (!def.equalsIgnoreCase("")) ? " DEFAULT " + def : ""; 
-			String p = (pkey) ? " PRIMARY KEY" : "";
-			String a = (aincr) ? " AUTOINCREMENT" : "";
+			String a = (aincr) ? " AUTO_INCREMENT" : "";
 			String c = (i < fields.size()) ? ",\n" : ""; 
 			
-			this.buildQuery(field + " " + type + n + d + p + a + c, true);
+			this.buildQuery(field + " " + type + n + d + a + c, true);
 		}
 		
-		this.buildQuery(");", true, false, false);
+		if(!P_KEY.equalsIgnoreCase(""))
+			this.buildQuery("\n, PRIMARY KEY(" + P_KEY + ")", true, false, false);
+		
+		this.buildQuery(") ENGINE=InnoDB DEFAULT CHARSET=latin1;", true, false, false);
 		
 		return this;
 	}
