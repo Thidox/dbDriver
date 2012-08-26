@@ -54,7 +54,7 @@ public class PlayerListener implements Listener {
 				values.put(i, value);
 			}
 			
-			db.insert("#__playerData", fields, values);
+			db.insert("#__playerData", fields, values).updateQuery();
 			
 			// We are going to have to insert!
 		}else{
@@ -65,7 +65,7 @@ public class PlayerListener implements Listener {
 			data.put("data", "timesClicked + 1"); // Make the database increment the current value of column timesClicked by 1
 			fields.put("timesClicked", data);
 			
-			db.update("#__playerData").set(fields, true);
+			db.update("#__playerData").set(fields, true).updateQuery();
 			// We can update!
 		}
 	}

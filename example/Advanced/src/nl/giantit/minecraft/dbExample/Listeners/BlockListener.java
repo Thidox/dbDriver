@@ -64,7 +64,7 @@ public class BlockListener implements Listener {
 			data.put("data", "blocksBroken + 1"); // Make the database increment the current value of column blocksBroken by 1
 			fields.put("blocksBroken", data);
 			
-			db.update("#__playerData").set(fields, true);
+			db.update("#__playerData").set(fields, true).updateQuery();
 			// We can update!
 		}
 	}
