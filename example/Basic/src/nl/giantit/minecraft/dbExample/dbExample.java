@@ -28,7 +28,7 @@ public class dbExample extends JavaPlugin {
 		HashMap<String, String> dbData = new HashMap<String, String>();
 		dbData.put("driver", "SQLite");
 		dbData.put("database", "dbExample");
-		dbData.put("prefix", "db_");
+		dbData.put("prefix", "basic_");
 		dbData.put("debug", "true");
 		
 		this.dbDriver = Database.Obtain(this, null, dbData);
