@@ -295,42 +295,6 @@ public class hTwo implements iDriver {
 	}
 
 	@Override
-	public int countResult() {
-		
-		return 0;
-	}
-
-	@Override
-	public int countResult(Integer queryID) {
-		
-		return 0;
-	}
-
-	@Override
-	public ArrayList<HashMap<String, String>> getResult() {
-		
-		return null;
-	}
-
-	@Override
-	public ArrayList<HashMap<String, String>> getResult(Integer queryID) {
-		
-		return null;
-	}
-
-	@Override
-	public HashMap<String, String> getSingleResult() {
-		
-		return null;
-	}
-
-	@Override
-	public HashMap<String, String> getSingleResult(Integer queryID) {
-		
-		return null;
-	}
-
-	@Override
 	public iDriver select(String field) {
 		
 		return null;

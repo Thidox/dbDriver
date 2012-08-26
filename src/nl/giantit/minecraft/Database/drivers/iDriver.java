@@ -30,15 +30,6 @@ public interface iDriver {
 	public void updateQuery();
 	public void updateQuery(Integer queryID);
 	
-	public int countResult();
-	public int countResult(Integer queryID);
-	
-	public ArrayList<HashMap<String, String>> getResult();
-	public ArrayList<HashMap<String, String>> getResult(Integer queryID);
-	
-	public HashMap<String, String> getSingleResult();
-	public HashMap<String, String> getSingleResult(Integer queryID);
-	
 	public iDriver select(String field);
 	public iDriver select(String... fields);
 	public iDriver select(ArrayList<String> fields);
