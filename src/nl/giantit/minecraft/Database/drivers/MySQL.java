@@ -145,8 +145,25 @@ public class MySQL implements iDriver {
 	
 	@Override
 	public void buildQuery(String string, Boolean add, Boolean finalize, Boolean debug, Boolean table) {
-		int last = sql.size();
-		this.buildQuery(string, last, finalize, debug, table);
+		if(!add) {
+			if(table)
+				string = string.replace("#__", prefix);
+			
+			HashMap<String, String> ad = new HashMap<String, String>();
+			ad.put("sql", string);
+			
+			if(finalize)
+				ad.put("finalize", "true");
+			
+			if(debug)
+				ad.put("debug", "true");
+			
+			sql.add(ad);
+		}else{
+			int last = sql.size() - 1;
+			
+			this.buildQuery(string, last, finalize, debug, table);
+		}
 	}
 	
 	@Override
@@ -166,7 +183,6 @@ public class MySQL implements iDriver {
 	
 	@Override
 	public void buildQuery(String string, Integer add, Boolean finalize, Boolean debug, Boolean table) {
-		int last = add;
 		if(table)
 			string = string.replace("#__", prefix);
 		
@@ -190,10 +206,10 @@ public class MySQL implements iDriver {
 					plugin.getLogger().log(Level.SEVERE, add.toString() + " is not a valid SQL query!");
 		
 			if(debug == true)
-				plugin.getLogger().log(Level.INFO, sql.get(last).get("sql"));
+				plugin.getLogger().log(Level.INFO, sql.get(add).get("sql"));
 		}catch(NullPointerException e) {
 			if(true == debug)
-				plugin.getLogger().log(Level.SEVERE, "Query " + last + " could not be found!");
+				plugin.getLogger().log(Level.SEVERE, "Query " + add + " could not be found!");
 		}
 	}
 	
