@@ -65,7 +65,7 @@ public class hTwo implements iDriver {
 	@Override
 	public void close() {
 		try {
-			if(!con.isClosed() || !con.isValid(0))
+			if(con.isClosed())
 				return;
 			
 			this.con.close();
