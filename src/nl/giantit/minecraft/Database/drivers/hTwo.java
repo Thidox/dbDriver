@@ -14,13 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-/**
- *
- * @author Giant
- */
-public class MySQL implements iDriver {
+public class hTwo implements iDriver {
 	
-	private static HashMap<String, MySQL> instance = new HashMap<String, MySQL>();
+	private static HashMap<String,  hTwo> instance = new HashMap<String,  hTwo>();
 	private Plugin plugin;
 	
 	private ArrayList<HashMap<String, String>> sql = new ArrayList<HashMap<String, String>>();
@@ -37,12 +33,20 @@ public class MySQL implements iDriver {
 		
 		return d;
 	}
-	
-	private void connect() {
-		String dbPath = "jdbc:mysql://" + this.host + ":" + this.port + "/" + this.db + "?user=" + this.user + "&password=" + this.pass;
+
+	private hTwo(Plugin p, HashMap<String, String> c) {
+		plugin = p;
+		
+		this.db = c.get("database");
+		this.prefix = c.get("prefix");
+		this.user = c.get("user");
+		this.pass = c.get("password");
+		this.dbg = (c.containsKey("debug")) ? this.parseBool(c.get("debug"), false) : false;
+
+		String dbPath = "jdbc:h2:" + plugin.getDataFolder() + java.io.File.separator + this.db;
 		try{
-			Class.forName("com.mysql.jdbc.Driver");
-			this.con = DriverManager.getConnection(dbPath);
+			Class.forName("org.h2.Driver");
+			this.con = DriverManager.getConnection(dbPath, this.user, this.pass);
 		}catch(SQLException e) {
 			plugin.getLogger().log(Level.SEVERE, "Failed to connect to database: SQL error!");
 			if(this.dbg) {
@@ -50,31 +54,18 @@ public class MySQL implements iDriver {
 				e.printStackTrace();
 			}
 		}catch(ClassNotFoundException e) {
-			plugin.getLogger().log(Level.SEVERE, "Failed to connect to database: MySQL library not found!");
+			plugin.getLogger().log(Level.SEVERE, "Failed to connect to database: h2 library not found!");
 			if(this.dbg) {
 				plugin.getLogger().log(Level.INFO, e.getMessage());
 				e.printStackTrace();
 			}
 		}
 	}
-	
-	private MySQL(Plugin p, HashMap<String, String> c) {
-		this.plugin = p;
-		
-		this.db = c.get("database");
-		this.host = c.get("host");
-		this.port = String.valueOf(c.get("port"));
-		this.user = c.get("user");
-		this.pass = c.get("password");
-		this.prefix = c.get("prefix");
-		this.dbg = (c.containsKey("debug")) ? this.parseBool(c.get("debug"), false) : false;
-		this.connect();
-	}
-	
+
 	@Override
 	public void close() {
 		try {
-			if(null == con || !con.isClosed() || !con.isValid(0))
+			if(con.isClosed())
 				return;
 			
 			this.con.close();
@@ -82,25 +73,19 @@ public class MySQL implements iDriver {
 			//ignore
 		}
 	}
-	
+
 	@Override
 	public boolean tableExists(String table) {
 		ResultSet res = null;
 		table = table.replace("#__", prefix);
+		
 		try {
 			DatabaseMetaData data = this.con.getMetaData();
 			res = data.getTables(null, null, table, null);
 
 			return res.next();
-		}catch (NullPointerException e) {
-			plugin.getLogger().log(Level.SEVERE, "Could not load table " + table);
-			if(this.dbg) {
-				plugin.getLogger().log(Level.INFO, e.getMessage());
-				e.printStackTrace();
-			}
-            return false;
 		}catch (SQLException e) {
-			plugin.getLogger().log(Level.SEVERE, "Could not load table " + table);
+			plugin.getLogger().log(Level.SEVERE, " Could not load table " + table);
 			if(this.dbg) {
 				plugin.getLogger().log(Level.INFO, e.getMessage());
 				e.printStackTrace();
@@ -112,7 +97,7 @@ public class MySQL implements iDriver {
 					res.close();
 				}
 			}catch (Exception e) {
-				plugin.getLogger().log(Level.SEVERE, "Could not close result connection to database");
+				plugin.getLogger().log(Level.SEVERE, " Could not close result connection to database");
 				if(this.dbg) {
 					plugin.getLogger().log(Level.INFO, e.getMessage());
 					e.printStackTrace();
@@ -121,28 +106,27 @@ public class MySQL implements iDriver {
 			}
 		}
 	}
-	
+
 	@Override
 	public void buildQuery(String string) {
-		this.buildQuery(string, false, false, false);
+		this.buildQuery(string, false);
 	}
-	
+
 	@Override
 	public void buildQuery(String string, Boolean add) {
-		this.buildQuery(string, add, false, false);
+		this.buildQuery(string, add, false);
 	}
-	
+
 	@Override
 	public void buildQuery(String string, Boolean add, Boolean finalize) {
 		this.buildQuery(string, add, finalize, false);
 	}
-	
-	
+
 	@Override
 	public void buildQuery(String string, Boolean add, Boolean finalize, Boolean debug) {
 		this.buildQuery(string, add, finalize, debug, false);
 	}
-	
+
 	@Override
 	public void buildQuery(String string, Boolean add, Boolean finalize, Boolean debug, Boolean table) {
 		if(!add) {
@@ -165,22 +149,22 @@ public class MySQL implements iDriver {
 			this.buildQuery(string, last, finalize, debug, table);
 		}
 	}
-	
+
 	@Override
 	public void buildQuery(String string, Integer add) {
-		this.buildQuery(string, add, false, false);
+		this.buildQuery(string, add, false);
 	}
-	
+
 	@Override
 	public void buildQuery(String string, Integer add, Boolean finalize) {
 		this.buildQuery(string, add, finalize, false);
 	}
-	
+
 	@Override
 	public void buildQuery(String string, Integer add, Boolean finalize, Boolean debug) {
 		this.buildQuery(string, add, finalize, debug, false);
 	}
-	
+
 	@Override
 	public void buildQuery(String string, Integer add, Boolean finalize, Boolean debug, Boolean table) {
 		if(table)
@@ -191,7 +175,7 @@ public class MySQL implements iDriver {
 			if(SQL.containsKey("sql")) {
 				if(SQL.containsKey("finalize")) {
 					if(true == debug)
-						plugin.getLogger().log(Level.SEVERE, "SQL syntax is finalized!");
+						plugin.getLogger().log(Level.SEVERE, " SQL syntax is finalized!");
 					return;
 				}else{
 					SQL.put("sql", SQL.get("sql") + string);
@@ -209,13 +193,14 @@ public class MySQL implements iDriver {
 				plugin.getLogger().log(Level.INFO, sql.get(add).get("sql"));
 		}catch(NullPointerException e) {
 			if(true == debug)
-				plugin.getLogger().log(Level.SEVERE, "Query " + add + " could not be found!");
+				plugin.getLogger().log(Level.SEVERE, "Query " + add.toString() + " could not be found!");
 		}
 	}
-	
+
 	@Override
 	public ArrayList<HashMap<String, String>> execQuery() {
 		Integer queryID = ((sql.size() - 1 > 0) ? (sql.size() - 1) : 0);
+		
 		return this.execQuery(queryID);
 	}
 	
@@ -228,9 +213,6 @@ public class MySQL implements iDriver {
 			HashMap<String, String> SQL = sql.get(queryID);
 			if(SQL.containsKey("sql")) {
 				try {
-					if(null == con || con.isClosed() || !con.isValid(0))
-						this.connect();
-					
 					st = con.createStatement();
 					//query.add(queryID, st.executeQuery(SQL.get("sql")));
 					ResultSet res = st.executeQuery(SQL.get("sql"));
@@ -245,7 +227,7 @@ public class MySQL implements iDriver {
 						data.add(row);
 					}
 				}catch (SQLException e) {
-					plugin.getLogger().log(Level.SEVERE, "Could not execute query!");
+					plugin.getLogger().log(Level.SEVERE, " Could not execute query!");
 					if(this.dbg) {
 						plugin.getLogger().log(Level.INFO, e.getMessage());
 						e.printStackTrace();
@@ -256,7 +238,7 @@ public class MySQL implements iDriver {
 							st.close();
 						}
 					}catch (Exception e) {
-						plugin.getLogger().log(Level.SEVERE, "Could not close database connection");
+						plugin.getLogger().log(Level.SEVERE, " Could not close database connection");
 						if(this.dbg) {
 							plugin.getLogger().log(Level.INFO, e.getMessage());
 							e.printStackTrace();
@@ -270,10 +252,11 @@ public class MySQL implements iDriver {
 		
 		return data;
 	}
-	
+
 	@Override
 	public void updateQuery() {
 		Integer queryID = ((sql.size() - 1 > 0) ? (sql.size() - 1) : 0);
+		
 		this.updateQuery(queryID);
 	}
 	
@@ -285,13 +268,10 @@ public class MySQL implements iDriver {
 			HashMap<String, String> SQL = sql.get(queryID);
 			if(SQL.containsKey("sql")) {
 				try {
-					if(null == con || con.isClosed() || !con.isValid(0))
-						this.connect();
-					
 					st = con.createStatement();
 					st.executeUpdate(SQL.get("sql"));
 				}catch (SQLException e) {
-					plugin.getLogger().log(Level.SEVERE, "Could not execute query!");
+					plugin.getLogger().log(Level.SEVERE, " Could not execute query!");
 					if(this.dbg) {
 						plugin.getLogger().log(Level.INFO, e.getMessage());
 						e.printStackTrace();
@@ -302,7 +282,7 @@ public class MySQL implements iDriver {
 							st.close();
 						}
 					}catch (Exception e) {
-						plugin.getLogger().log(Level.SEVERE, "Could not close database connection");
+						plugin.getLogger().log(Level.SEVERE, " Could not close database connection");
 						if(this.dbg) {
 							plugin.getLogger().log(Level.INFO, e.getMessage());
 							e.printStackTrace();
@@ -311,7 +291,7 @@ public class MySQL implements iDriver {
 				}
 			}
 		}catch(NullPointerException e) {
-			plugin.getLogger().log(Level.SEVERE, queryID.toString() + " is not a valid SQL query!");
+			plugin.getLogger().log(Level.SEVERE, "Query " + queryID.toString() + " could not be found!");
 		}
 	}
 	
@@ -655,7 +635,7 @@ public class MySQL implements iDriver {
 		if(!P_KEY.equalsIgnoreCase(""))
 			this.buildQuery("\n, PRIMARY KEY(" + P_KEY + ")", true, false, false);
 		
-		this.buildQuery(") ENGINE=InnoDB DEFAULT CHARSET=latin1;", true, false, false);
+		this.buildQuery(");", true, false, false);
 		
 		return this;
 	}
@@ -734,10 +714,11 @@ public class MySQL implements iDriver {
 		return this;
 	}
 	
-	public static MySQL Obtain(Plugin p, HashMap<String, String> conf, String instance) {
-		if(!MySQL.instance.containsKey(instance))
-			MySQL.instance.put(instance, new MySQL(p, conf));
+	public static hTwo Obtain(Plugin p, HashMap<String, String> conf, String instance) {
+		if(!hTwo.instance.containsKey(instance))
+			hTwo.instance.put(instance, new hTwo(p, conf));
 		
-		return MySQL.instance.get(instance);
+		return hTwo.instance.get(instance);
 	}
+
 }

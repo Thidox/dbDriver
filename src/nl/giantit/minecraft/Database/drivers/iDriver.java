@@ -22,21 +22,13 @@ public interface iDriver {
 	public void buildQuery(String string, Integer add);
 	public void buildQuery(String string, Integer add, Boolean finalize);
 	public void buildQuery(String string, Integer add, Boolean finalize, Boolean debug);
+	public void buildQuery(String string, Integer add, Boolean finalize, Boolean debug, Boolean table);
 	
 	public ArrayList<HashMap<String, String>> execQuery();
 	public ArrayList<HashMap<String, String>> execQuery(Integer queryID);
 	
 	public void updateQuery();
 	public void updateQuery(Integer queryID);
-	
-	public int countResult();
-	public int countResult(Integer queryID);
-	
-	public ArrayList<HashMap<String, String>> getResult();
-	public ArrayList<HashMap<String, String>> getResult(Integer queryID);
-	
-	public HashMap<String, String> getSingleResult();
-	public HashMap<String, String> getSingleResult(Integer queryID);
 	
 	public iDriver select(String field);
 	public iDriver select(String... fields);
