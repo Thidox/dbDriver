@@ -28,9 +28,9 @@ public class dbExample extends JavaPlugin {
 		
 		if(resSet.size() > 0) {
 			HashMap<String, String> res = resSet.get(0);
-			data.put("timesClicked", Integer.valueOf(res.get("timesClicked")));
-			data.put("blocksBroken", Integer.valueOf(res.get("blocksBroken")));
-			data.put("movesMade", Integer.valueOf(res.get("movesMade")));
+			data.put("timesClicked", Integer.valueOf(res.get("timesvlicked")));
+			data.put("blocksBroken", Integer.valueOf(res.get("blocksbroken")));
+			data.put("movesMade", Integer.valueOf(res.get("movesmade")));
 			
 			return data;
 		}
@@ -72,6 +72,12 @@ public class dbExample extends JavaPlugin {
 		
 		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 		getServer().getPluginManager().registerEvents(new BlockListener(this), this);
+	}
+	
+	@Override
+	public void onDisable() {
+		// Properly close current connection!
+		this.dbDriver.getEngine().close();
 	}
 	
 	@Override
