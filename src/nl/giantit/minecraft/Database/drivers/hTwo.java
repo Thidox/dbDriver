@@ -81,7 +81,7 @@ public class hTwo implements iDriver {
 		
 		try {
 			DatabaseMetaData data = this.con.getMetaData();
-			res = data.getTables(null, null, table, null);
+			res = data.getTables(null, null, table.toUpperCase(), null);
 
 			return res.next();
 		}catch (SQLException e) {
