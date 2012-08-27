@@ -635,7 +635,7 @@ public class hTwo implements iDriver {
 		if(!P_KEY.equalsIgnoreCase(""))
 			this.buildQuery("\n, PRIMARY KEY(" + P_KEY + ")", true, false, false);
 		
-		this.buildQuery(") ENGINE=InnoDB DEFAULT CHARSET=latin1;", true, false, false);
+		this.buildQuery(");", true, false, false);
 		
 		return this;
 	}
