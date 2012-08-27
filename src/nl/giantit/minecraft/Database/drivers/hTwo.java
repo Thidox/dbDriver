@@ -54,7 +54,7 @@ public class hTwo implements iDriver {
 				e.printStackTrace();
 			}
 		}catch(ClassNotFoundException e) {
-			plugin.getLogger().log(Level.SEVERE, "Failed to connect to database: SQLite library not found!");
+			plugin.getLogger().log(Level.SEVERE, "Failed to connect to database: h2 library not found!");
 			if(this.dbg) {
 				plugin.getLogger().log(Level.INFO, e.getMessage());
 				e.printStackTrace();
