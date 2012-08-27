@@ -222,7 +222,7 @@ public class hTwo implements iDriver {
 						ResultSetMetaData rsmd = res.getMetaData();
 						int columns = rsmd.getColumnCount();
 						for(int i = 1; i < columns + 1; i++) {
-							row.put(rsmd.getColumnName(i), res.getString(i));
+							row.put(rsmd.getColumnName(i).toLowerCase(), res.getString(i));
 						}
 						data.add(row);
 					}
