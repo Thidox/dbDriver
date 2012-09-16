@@ -11,6 +11,8 @@ public interface iDriver {
 	
 	public void close();
 	
+	public boolean isConnected();
+	
 	public boolean tableExists(String table);
 	
 	public void buildQuery(String string);

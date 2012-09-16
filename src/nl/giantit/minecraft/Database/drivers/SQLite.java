@@ -79,6 +79,15 @@ public class SQLite implements iDriver {
 	}
 	
 	@Override
+	public boolean isConnected() {
+		try {
+			return con != null && !con.isClosed() && con.isValid(0);
+		}catch(SQLException e) {
+			return false;
+		}
+	}
+	
+	@Override
 	public boolean tableExists(String table) {
 		ResultSet res = null;
 		table = table.replace("#__", prefix);
