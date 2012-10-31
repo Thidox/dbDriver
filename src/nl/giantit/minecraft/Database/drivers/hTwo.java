@@ -1,5 +1,6 @@
 package nl.giantit.minecraft.Database.drivers;
 
+import nl.giantit.minecraft.Database.iDriver;
 import org.bukkit.plugin.Plugin;
 
 import java.sql.Connection;

@@ -1,6 +1,6 @@
 package nl.giantit.minecraft.dbExample.Listeners;
 
-import nl.giantit.minecraft.Database.drivers.iDriver;
+import nl.giantit.minecraft.Database.iDriver;
 import nl.giantit.minecraft.dbExample.dbExample;
 
 import org.bukkit.entity.Player;

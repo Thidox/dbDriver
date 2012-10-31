@@ -3,7 +3,6 @@ package nl.giantit.minecraft.Database;
 import nl.giantit.minecraft.Database.drivers.MySQL;
 import nl.giantit.minecraft.Database.drivers.SQLite;
 import nl.giantit.minecraft.Database.drivers.hTwo;
-import nl.giantit.minecraft.Database.drivers.iDriver;
 
 import org.bukkit.plugin.Plugin;
 

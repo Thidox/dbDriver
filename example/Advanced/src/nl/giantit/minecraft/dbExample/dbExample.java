@@ -1,7 +1,7 @@
 package nl.giantit.minecraft.dbExample;
 
 import nl.giantit.minecraft.Database.Database;
-import nl.giantit.minecraft.Database.drivers.iDriver;
+import nl.giantit.minecraft.Database.iDriver;
 import nl.giantit.minecraft.dbExample.Listeners.BlockListener;
 import nl.giantit.minecraft.dbExample.Listeners.PlayerListener;
 

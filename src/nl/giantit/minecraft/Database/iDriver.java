@@ -1,4 +1,4 @@
-package nl.giantit.minecraft.Database.drivers;
+package nl.giantit.minecraft.Database;
 
 import java.util.ArrayList;
 import java.util.HashMap;
