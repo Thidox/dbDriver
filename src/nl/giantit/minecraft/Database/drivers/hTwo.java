@@ -50,14 +50,14 @@ public class hTwo implements iDriver {
 		}catch(SQLException e) {
 			plugin.getLogger().log(Level.SEVERE, "Failed to connect to database: SQL error!");
 			if(this.dbg) {
-				plugin.getLogger().log(Level.INFO, e.getMessage());
-				e.printStackTrace();
+				plugin.getLogger().log(Level.INFO, e.getMessage(), e);
+				
 			}
 		}catch(ClassNotFoundException e) {
 			plugin.getLogger().log(Level.SEVERE, "Failed to connect to database: h2 library not found!");
 			if(this.dbg) {
-				plugin.getLogger().log(Level.INFO, e.getMessage());
-				e.printStackTrace();
+				plugin.getLogger().log(Level.INFO, e.getMessage(), e);
+				
 			}
 		}
 	}
@@ -96,8 +96,8 @@ public class hTwo implements iDriver {
 		}catch (SQLException e) {
 			plugin.getLogger().log(Level.SEVERE, " Could not load table " + table);
 			if(this.dbg) {
-				plugin.getLogger().log(Level.INFO, e.getMessage());
-				e.printStackTrace();
+				plugin.getLogger().log(Level.INFO, e.getMessage(), e);
+				
 			}
             return false;
 		} finally {
@@ -108,8 +108,8 @@ public class hTwo implements iDriver {
 			}catch (Exception e) {
 				plugin.getLogger().log(Level.SEVERE, " Could not close result connection to database");
 				if(this.dbg) {
-					plugin.getLogger().log(Level.INFO, e.getMessage());
-					e.printStackTrace();
+					plugin.getLogger().log(Level.INFO, e.getMessage(), e);
+					
 				}
 				return false;
 			}
@@ -238,8 +238,7 @@ public class hTwo implements iDriver {
 				}catch (SQLException e) {
 					plugin.getLogger().log(Level.SEVERE, " Could not execute query!");
 					if(this.dbg) {
-						plugin.getLogger().log(Level.INFO, e.getMessage());
-						e.printStackTrace();
+						plugin.getLogger().log(Level.INFO, e.getMessage(), e);
 					}
 				} finally {
 					try {
@@ -249,8 +248,8 @@ public class hTwo implements iDriver {
 					}catch (Exception e) {
 						plugin.getLogger().log(Level.SEVERE, " Could not close database connection");
 						if(this.dbg) {
-							plugin.getLogger().log(Level.INFO, e.getMessage());
-							e.printStackTrace();
+							plugin.getLogger().log(Level.INFO, e.getMessage(), e);
+							
 						}
 					}
 				}
@@ -282,8 +281,7 @@ public class hTwo implements iDriver {
 				}catch (SQLException e) {
 					plugin.getLogger().log(Level.SEVERE, " Could not execute query!");
 					if(this.dbg) {
-						plugin.getLogger().log(Level.INFO, e.getMessage());
-						e.printStackTrace();
+						plugin.getLogger().log(Level.INFO, e.getMessage(), e);
 					}
 				} finally {
 					try {
@@ -293,8 +291,7 @@ public class hTwo implements iDriver {
 					}catch (Exception e) {
 						plugin.getLogger().log(Level.SEVERE, " Could not close database connection");
 						if(this.dbg) {
-							plugin.getLogger().log(Level.INFO, e.getMessage());
-							e.printStackTrace();
+							plugin.getLogger().log(Level.INFO, e.getMessage(), e);
 						}
 					}
 				}
