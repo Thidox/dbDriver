@@ -11,15 +11,19 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
+import nl.giantit.minecraft.Database.DatabaseType;
 
 /**
  *
  * @author Giant
  */
 public class SQLite implements iDriver {
+	
+	private DatabaseType type = DatabaseType.SQLite;
 	
 	private static HashMap<String, SQLite> instance = new HashMap<String, SQLite>();
 	private Plugin plugin;
@@ -55,14 +59,12 @@ public class SQLite implements iDriver {
 		}catch(SQLException e) {
 			plugin.getLogger().log(Level.SEVERE, "Failed to connect to database: SQL error!");
 			if(this.dbg) {
-				plugin.getLogger().log(Level.INFO, e.getMessage());
-				e.printStackTrace();
+				plugin.getLogger().log(Level.INFO, e.getMessage(), e);
 			}
 		}catch(ClassNotFoundException e) {
 			plugin.getLogger().log(Level.SEVERE, "Failed to connect to database: SQLite library not found!");
 			if(this.dbg) {
-				plugin.getLogger().log(Level.INFO, e.getMessage());
-				e.printStackTrace();
+				plugin.getLogger().log(Level.INFO, e.getMessage(), e);
 			}
 		}
 	}
@@ -101,8 +103,7 @@ public class SQLite implements iDriver {
 		}catch (SQLException e) {
 			plugin.getLogger().log(Level.SEVERE, " Could not load table " + table);
 			if(this.dbg) {
-				plugin.getLogger().log(Level.INFO, e.getMessage());
-				e.printStackTrace();
+				plugin.getLogger().log(Level.INFO, e.getMessage(), e);
 			}
             return false;
 		} finally {
@@ -113,8 +114,7 @@ public class SQLite implements iDriver {
 			}catch (Exception e) {
 				plugin.getLogger().log(Level.SEVERE, " Could not close result connection to database");
 				if(this.dbg) {
-					plugin.getLogger().log(Level.INFO, e.getMessage());
-					e.printStackTrace();
+					plugin.getLogger().log(Level.INFO, e.getMessage(), e);
 				}
 				return false;
 			}
@@ -246,8 +246,7 @@ public class SQLite implements iDriver {
 				}catch (SQLException e) {
 					plugin.getLogger().log(Level.SEVERE, " Could not execute query!");
 					if(this.dbg) {
-						plugin.getLogger().log(Level.INFO, e.getMessage());
-						e.printStackTrace();
+						plugin.getLogger().log(Level.INFO, e.getMessage(), e);
 					}
 				} finally {
 					try {
@@ -257,8 +256,7 @@ public class SQLite implements iDriver {
 					}catch (Exception e) {
 						plugin.getLogger().log(Level.SEVERE, " Could not close database connection");
 						if(this.dbg) {
-							plugin.getLogger().log(Level.INFO, e.getMessage());
-							e.printStackTrace();
+							plugin.getLogger().log(Level.INFO, e.getMessage(), e);
 						}
 					}
 				}
@@ -290,8 +288,7 @@ public class SQLite implements iDriver {
 				}catch (SQLException e) {
 					plugin.getLogger().log(Level.SEVERE, " Could not execute query!");
 					if(this.dbg) {
-						plugin.getLogger().log(Level.INFO, e.getMessage());
-						e.printStackTrace();
+						plugin.getLogger().log(Level.INFO, e.getMessage(), e);
 					}
 				} finally {
 					try {
@@ -301,8 +298,7 @@ public class SQLite implements iDriver {
 					}catch (Exception e) {
 						plugin.getLogger().log(Level.SEVERE, " Could not close database connection");
 						if(this.dbg) {
-							plugin.getLogger().log(Level.INFO, e.getMessage());
-							e.printStackTrace();
+							plugin.getLogger().log(Level.INFO, e.getMessage(), e);
 						}
 					}
 				}
@@ -323,9 +319,7 @@ public class SQLite implements iDriver {
 	public iDriver select(String... fields) {
 		ArrayList<String> f = new ArrayList<String>();
 		if(fields.length > 0) {
-			for(String field : fields) { 
-				f.add(field);
-			}
+			f.addAll(Arrays.asList(fields));
 		}
 
 		return this.select(f);
@@ -404,9 +398,9 @@ public class SQLite implements iDriver {
 			int i = 0;
 			
 			for(Map.Entry<String, HashMap<String, String>> field : fields.entrySet()) {
-				String type = (field.getValue().containsKey("type") && field.getValue().get("type").equalsIgnoreCase("OR")) ? "OR" : "AND";
+				String t = (field.getValue().containsKey("type") && field.getValue().get("type").equalsIgnoreCase("OR")) ? "OR" : "AND";
 				if(i > 0)
-					SQL += " " + type + " ";
+					SQL += " " + t + " ";
 				
 				if(field.getValue().containsKey("kind") && field.getValue().get("kind").equals("int")) {
 					SQL += field.getKey() + "=" + field.getValue().get("data");
@@ -601,7 +595,7 @@ public class SQLite implements iDriver {
 			HashMap<String, String> data = entry.getValue();
 			
 			String field = entry.getKey();
-			String type = "VARCHAR";
+			String t = "VARCHAR";
 			Integer length = 100;
 			Boolean NULL = false;
 			String def = "";
@@ -609,13 +603,13 @@ public class SQLite implements iDriver {
 			Boolean pkey = false;
 			
 			if(data.containsKey("TYPE")) {
-				type = data.get("TYPE");
-				if(type.equalsIgnoreCase("INT"))
-					type = "INTEGER";
+				t = data.get("TYPE");
+				if(t.equalsIgnoreCase("INT"))
+					t = "INTEGER";
 			}
 			
 			if(data.containsKey("LENGTH")) {
-				if(null != data.get("LENGTH") && !type.equals("INTEGER")) {
+				if(null != data.get("LENGTH") && !t.equals("INTEGER")) {
 					try{
 						length = Integer.parseInt(data.get("LENGTH"));
 						length = length < 0 ? 100 : length;
@@ -641,7 +635,7 @@ public class SQLite implements iDriver {
 			}
 			
 			if(length != null)
-				type += "(" + length + ")";
+				t += "(" + length + ")";
 			
 			String n = "";
 			if(!aincr)
@@ -652,7 +646,7 @@ public class SQLite implements iDriver {
 			String a = (aincr) ? " AUTOINCREMENT" : "";
 			String c = (i < fields.size()) ? ",\n" : ""; 
 			
-			this.buildQuery(field + " " + type + n + d + p + a + c, true);
+			this.buildQuery(field + " " + t + n + d + p + a + c, true);
 		}
 		
 		this.buildQuery(");", true, false, false);
@@ -676,15 +670,15 @@ public class SQLite implements iDriver {
 			HashMap<String, String> data = entry.getValue();
 			
 			String field = entry.getKey();
-			String type = "VARCHAR";
+			String t = "VARCHAR";
 			Integer length = 100;
 			Boolean NULL = false;
 			String def = "";
 			
 			if(data.containsKey("TYPE")) {
-				type = data.get("TYPE");
-				if(type.equalsIgnoreCase("INT"))
-					type = "INTEGER";
+				t = data.get("TYPE");
+				if(t.equalsIgnoreCase("INT"))
+					t = "INTEGER";
 			}
 			
 			if(data.containsKey("LENGTH")) {
@@ -706,13 +700,13 @@ public class SQLite implements iDriver {
 			}
 			
 			if(length != null)
-				type += "(" + length + ")";
+				t += "(" + length + ")";
 			
 			String n = (!NULL) ? " NOT NULL" : " DEFAULT NULL";
 			String d = (!def.equalsIgnoreCase("")) ? " DEFAULT " + def : "";
 			String c = (i < fields.size()) ? ",\n" : ""; 
 			
-			this.buildQuery("ADD " + field + " " + type + n + d + c, true);
+			this.buildQuery("ADD " + field + " " + t + n + d + c, true);
 		}
 		
 		return this;
@@ -734,6 +728,11 @@ public class SQLite implements iDriver {
 	public iDriver debugFinalize(Boolean dbg) {
 		this.buildQuery("", true, true, dbg);
 		return this;
+	}
+	
+	@Override
+	public DatabaseType getType() {
+		return this.type;
 	}
 	
 	public static SQLite Obtain(Plugin p, HashMap<String, String> conf, String instance) {

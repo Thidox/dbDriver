@@ -68,4 +68,6 @@ public interface iDriver {
 	public iDriver debug(Boolean dbg);
 	public iDriver Finalize();
 	public iDriver debugFinalize(Boolean dbg);
+	
+	public DatabaseType getType();
 }

@@ -11,20 +11,22 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
+import nl.giantit.minecraft.Database.DatabaseType;
 
 public class hTwo implements iDriver {
+	
+	private DatabaseType type = DatabaseType.SQLite;
 	
 	private static HashMap<String,  hTwo> instance = new HashMap<String,  hTwo>();
 	private Plugin plugin;
 	
 	private ArrayList<HashMap<String, String>> sql = new ArrayList<HashMap<String, String>>();
-	private ArrayList<ResultSet> query = new ArrayList<ResultSet>();
-	private int execs = 0;
 	
-	private String cur, db, host, port, user, pass, prefix;
+	private String db, user, pass, prefix;
 	private Connection con = null;
 	private Boolean dbg = false;
 	
@@ -313,9 +315,7 @@ public class hTwo implements iDriver {
 	public iDriver select(String... fields) {
 		ArrayList<String> f = new ArrayList<String>();
 		if(fields.length > 0) {
-			for(String field : fields) { 
-				f.add(field);
-			}
+			f.addAll(Arrays.asList(fields));
 		}
 
 		return this.select(f);
@@ -394,9 +394,9 @@ public class hTwo implements iDriver {
 			int i = 0;
 			
 			for(Map.Entry<String, HashMap<String, String>> field : fields.entrySet()) {
-				String type = (field.getValue().containsKey("type") && field.getValue().get("type").equalsIgnoreCase("OR")) ? "OR" : "AND";
+				String t = (field.getValue().containsKey("type") && field.getValue().get("type").equalsIgnoreCase("OR")) ? "OR" : "AND";
 				if(i > 0)
-					SQL += " " + type + " ";
+					SQL += " " + t + " ";
 				
 				if(field.getValue().containsKey("kind") && field.getValue().get("kind").equals("int")) {
 					SQL += field.getKey() + "=" + field.getValue().get("data");
@@ -590,14 +590,14 @@ public class hTwo implements iDriver {
 			HashMap<String, String> data = entry.getValue();
 			
 			String field = entry.getKey();
-			String type = "VARCHAR";
+			String t = "VARCHAR";
 			Integer length = 100;
 			Boolean NULL = false;
 			String def = "";
 			Boolean aincr = false;
 			
 			if(data.containsKey("TYPE")) {
-				type = data.get("TYPE");
+				t = data.get("TYPE");
 			}
 			
 			if(data.containsKey("LENGTH")) {
@@ -629,14 +629,14 @@ public class hTwo implements iDriver {
 			}
 			
 			if(length != null)
-				type += "(" + length + ")";
+				t += "(" + length + ")";
 			
 			String n = (!NULL) ? " NOT NULL" : " DEFAULT NULL";
 			String d = (!def.equalsIgnoreCase("")) ? " DEFAULT " + def : ""; 
 			String a = (aincr) ? " AUTO_INCREMENT" : "";
 			String c = (i < fields.size()) ? ",\n" : ""; 
 			
-			this.buildQuery(field + " " + type + n + d + a + c, true);
+			this.buildQuery(field + " " + t + n + d + a + c, true);
 		}
 		
 		if(!P_KEY.equalsIgnoreCase(""))
@@ -663,13 +663,13 @@ public class hTwo implements iDriver {
 			HashMap<String, String> data = entry.getValue();
 			
 			String field = entry.getKey();
-			String type = "VARCHAR";
+			String t = "VARCHAR";
 			Integer length = 100;
 			Boolean NULL = false;
 			String def = "";
 			
 			if(data.containsKey("TYPE")) {
-				type = data.get("TYPE");
+				t = data.get("TYPE");
 			}
 			
 			if(data.containsKey("LENGTH")) {
@@ -691,13 +691,13 @@ public class hTwo implements iDriver {
 			}
 			
 			if(length != null)
-				type += "(" + length + ")";
+				t += "(" + length + ")";
 			
 			String n = (!NULL) ? " NOT NULL" : " DEFAULT NULL";
 			String d = (!def.equalsIgnoreCase("")) ? " DEFAULT " + def : "";
 			String c = (i < fields.size()) ? ",\n" : ""; 
 			
-			this.buildQuery("ADD " + field + " " + type + n + d + c, true);
+			this.buildQuery("ADD " + field + " " + t + n + d + c, true);
 		}
 		
 		return this;
@@ -719,6 +719,11 @@ public class hTwo implements iDriver {
 	public iDriver debugFinalize(Boolean dbg) {
 		this.buildQuery("", true, true, dbg);
 		return this;
+	}
+	
+	@Override
+	public DatabaseType getType() {
+		return this.type;
 	}
 	
 	public static hTwo Obtain(Plugin p, HashMap<String, String> conf, String instance) {
