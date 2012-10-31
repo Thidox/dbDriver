@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import nl.giantit.minecraft.Database.DatabaseType;
+import nl.giantit.minecraft.Database.QueryResult;
 
 public class hTwo implements iDriver {
 	
@@ -210,14 +211,14 @@ public class hTwo implements iDriver {
 	}
 
 	@Override
-	public ArrayList<HashMap<String, String>> execQuery() {
+	public QueryResult execQuery() {
 		Integer queryID = ((sql.size() - 1 > 0) ? (sql.size() - 1) : 0);
 		
 		return this.execQuery(queryID);
 	}
 	
 	@Override
-	public ArrayList<HashMap<String, String>> execQuery(Integer queryID) {
+	public QueryResult execQuery(Integer queryID) {
 		Statement st = null;
 		
 		ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
@@ -261,7 +262,7 @@ public class hTwo implements iDriver {
 			plugin.getLogger().log(Level.SEVERE, "Query " + queryID.toString() + " could not be found!");
 		}
 		
-		return data;
+		return QueryResult.QR(data);
 	}
 
 	@Override

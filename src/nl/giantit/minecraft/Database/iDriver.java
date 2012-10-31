@@ -26,8 +26,8 @@ public interface iDriver {
 	public void buildQuery(String string, Integer add, Boolean finalize, Boolean debug);
 	public void buildQuery(String string, Integer add, Boolean finalize, Boolean debug, Boolean table);
 	
-	public ArrayList<HashMap<String, String>> execQuery();
-	public ArrayList<HashMap<String, String>> execQuery(Integer queryID);
+	public QueryResult execQuery();
+	public QueryResult execQuery(Integer queryID);
 	
 	public void updateQuery();
 	public void updateQuery(Integer queryID);
