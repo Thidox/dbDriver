@@ -11,6 +11,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import nl.giantit.minecraft.Database.QueryResult;
+import nl.giantit.minecraft.Database.QueryResult.QueryRow;
 
 public class dbExample extends JavaPlugin {
 
@@ -44,10 +46,10 @@ public class dbExample extends JavaPlugin {
 			HashMap<String, String> where = new HashMap<String, String>();
 			where.put("player", sender.getName());
 			
-			ArrayList<HashMap<String, String>> resSet = this.dbDriver.getEngine().select("lucky").from("#__playerData").where(where).execQuery();
+			QueryResult resSet = this.dbDriver.getEngine().select("lucky").from("#__playerData").where(where).execQuery();
 			if(resSet.size() > 0) {
-				HashMap<String, String> res = resSet.get(0);
-				isLucky = res.get("lucky").equals("1");
+				QueryRow res = resSet.getRow();
+				isLucky = res.getString("lucky").equals("1");
 			}else{
 				Random rand = new Random();
 				int x = rand.nextInt(10) > 5 ? 1 : 0;

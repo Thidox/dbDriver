@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import nl.giantit.minecraft.Database.QueryResult;
 
 public class PlayerListener implements Listener {
 
@@ -27,7 +28,7 @@ public class PlayerListener implements Listener {
 		HashMap<String, String> where = new HashMap<String, String>();
 		where.put("player", p.getName());
 		
-		ArrayList<HashMap<String, String>> resSet = db.select("id").from("#__playerData").where(where).execQuery();
+		QueryResult resSet = db.select("id").from("#__playerData").where(where).execQuery();
 		
 		return resSet.size() == 1;
 	}

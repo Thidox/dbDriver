@@ -10,8 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import nl.giantit.minecraft.Database.QueryResult;
+import nl.giantit.minecraft.Database.QueryResult.QueryRow;
 
 public class dbExample extends JavaPlugin {
 
@@ -24,13 +25,13 @@ public class dbExample extends JavaPlugin {
 		HashMap<String, String> where = new HashMap<String, String>();
 		where.put("player", p.getName());
 		
-		ArrayList<HashMap<String, String>> resSet = db.select("timesClicked", "blocksBroken", "movesMade").from("#__playerData").where(where).execQuery();
+		QueryResult resSet = db.select("timesClicked", "blocksBroken", "movesMade").from("#__playerData").where(where).execQuery();
 		
 		if(resSet.size() > 0) {
-			HashMap<String, String> res = resSet.get(0);
-			data.put("timesClicked", Integer.valueOf(res.get("timesvlicked")));
-			data.put("blocksBroken", Integer.valueOf(res.get("blocksbroken")));
-			data.put("movesMade", Integer.valueOf(res.get("movesmade")));
+			QueryRow res = resSet.getRow();
+			data.put("timesClicked", res.getInteger("timesvlicked"));
+			data.put("blocksBroken", res.getInteger("blocksbroken"));
+			data.put("movesMade", res.getInteger("movesmade"));
 			
 			return data;
 		}
