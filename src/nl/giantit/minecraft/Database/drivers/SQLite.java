@@ -30,10 +30,8 @@ public class SQLite implements iDriver {
 	private Plugin plugin;
 	
 	private ArrayList<HashMap<String, String>> sql = new ArrayList<HashMap<String, String>>();
-	private ArrayList<ResultSet> query = new ArrayList<ResultSet>();
-	private int execs = 0;
 	
-	private String cur, db, host, port, user, pass, prefix;
+	private String db, user, pass, prefix;
 	private Connection con = null;
 	private Boolean dbg = false;
 	
