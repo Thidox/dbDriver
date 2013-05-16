@@ -16,15 +16,15 @@ public interface iDriver {
 	public boolean tableExists(String table);
 	
 	public void buildQuery(String string);
-	public void buildQuery(String string, Boolean add);
-	public void buildQuery(String string, Boolean add, Boolean finalize);
-	public void buildQuery(String string, Boolean add, Boolean finalize, Boolean debug);
-	public void buildQuery(String string, Boolean add, Boolean finalize, Boolean debug, Boolean table);
+	public void buildQuery(String string, boolean add);
+	public void buildQuery(String string, boolean add, boolean finalize);
+	public void buildQuery(String string, boolean add, boolean finalize, boolean debug);
+	public void buildQuery(String string, boolean add, boolean finalize, boolean debug, boolean table);
 	
 	public void buildQuery(String string, Integer add);
-	public void buildQuery(String string, Integer add, Boolean finalize);
-	public void buildQuery(String string, Integer add, Boolean finalize, Boolean debug);
-	public void buildQuery(String string, Integer add, Boolean finalize, Boolean debug, Boolean table);
+	public void buildQuery(String string, Integer add, boolean finalize);
+	public void buildQuery(String string, Integer add, boolean finalize, boolean debug);
+	public void buildQuery(String string, Integer add, boolean finalize, boolean debug, boolean table);
 	
 	public QueryResult execQuery();
 	public QueryResult execQuery(Integer queryID);
@@ -40,7 +40,7 @@ public interface iDriver {
 	public iDriver from(String table);
 	
 	public iDriver where(HashMap<String, String> fields);
-	public iDriver where(HashMap<String, HashMap<String, String>> fields, Boolean shite);
+	public iDriver where(HashMap<String, HashMap<String, String>> fields, boolean shite);
 	
 	public iDriver orderBy(HashMap<String, String> fields);
 	
@@ -50,7 +50,7 @@ public interface iDriver {
 	public iDriver update(String table);
 	
 	public iDriver set(HashMap<String, String> fields);
-	public iDriver set(HashMap<String, HashMap<String, String>> fields, Boolean shite);
+	public iDriver set(HashMap<String, HashMap<String, String>> fields, boolean shite);
 	
 	public iDriver insert(String table, ArrayList<String> fields, HashMap<Integer, HashMap<String, String>> values);
 	public iDriver insert(String table, ArrayList<String> fields, ArrayList<HashMap<Integer, HashMap<String, String>>> values);
@@ -65,9 +65,9 @@ public interface iDriver {
 	public iDriver alter(String table);
 	public iDriver add(HashMap<String, HashMap<String, String>> fields);
 	
-	public iDriver debug(Boolean dbg);
+	public iDriver debug(boolean dbg);
 	public iDriver Finalize();
-	public iDriver debugFinalize(Boolean dbg);
+	public iDriver debugFinalize(boolean dbg);
 	
 	public DatabaseType getType();
 }
