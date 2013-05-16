@@ -1,6 +1,9 @@
 package nl.giantit.minecraft.Database.drivers;
 
 import nl.giantit.minecraft.Database.iDriver;
+import nl.giantit.minecraft.Database.DatabaseType;
+import nl.giantit.minecraft.Database.QueryResult;
+
 import org.bukkit.plugin.Plugin;
 
 import java.sql.Connection;
@@ -15,23 +18,21 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
-import nl.giantit.minecraft.Database.DatabaseType;
-import nl.giantit.minecraft.Database.QueryResult;
 
 public class hTwo implements iDriver {
 	
 	private DatabaseType type = DatabaseType.SQLite;
 	
-	private static HashMap<String,  hTwo> instance = new HashMap<String,  hTwo>();
+	private static HashMap<String, hTwo> instance = new HashMap<String, hTwo>();
 	private Plugin plugin;
 	
 	private ArrayList<HashMap<String, String>> sql = new ArrayList<HashMap<String, String>>();
 	
 	private String db, user, pass, prefix;
 	private Connection con = null;
-	private Boolean dbg = false;
+	private boolean dbg = false;
 	
-	private Boolean parseBool(String s, Boolean d) {
+	private boolean parseBool(String s, boolean d) {
 		if(s.equalsIgnoreCase("1") || s.equalsIgnoreCase("y") || s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("true"))
 			return true;
 		
@@ -126,22 +127,22 @@ public class hTwo implements iDriver {
 	}
 
 	@Override
-	public void buildQuery(String string, Boolean add) {
+	public void buildQuery(String string, boolean add) {
 		this.buildQuery(string, add, false);
 	}
 
 	@Override
-	public void buildQuery(String string, Boolean add, Boolean finalize) {
+	public void buildQuery(String string, boolean add, boolean finalize) {
 		this.buildQuery(string, add, finalize, false);
 	}
 
 	@Override
-	public void buildQuery(String string, Boolean add, Boolean finalize, Boolean debug) {
+	public void buildQuery(String string, boolean add, boolean finalize, boolean debug) {
 		this.buildQuery(string, add, finalize, debug, false);
 	}
 
 	@Override
-	public void buildQuery(String string, Boolean add, Boolean finalize, Boolean debug, Boolean table) {
+	public void buildQuery(String string, boolean add, boolean finalize, boolean debug, boolean table) {
 		if(!add) {
 			if(table)
 				string = string.replace("#__", prefix);
@@ -169,17 +170,17 @@ public class hTwo implements iDriver {
 	}
 
 	@Override
-	public void buildQuery(String string, Integer add, Boolean finalize) {
+	public void buildQuery(String string, Integer add, boolean finalize) {
 		this.buildQuery(string, add, finalize, false);
 	}
 
 	@Override
-	public void buildQuery(String string, Integer add, Boolean finalize, Boolean debug) {
+	public void buildQuery(String string, Integer add, boolean finalize, boolean debug) {
 		this.buildQuery(string, add, finalize, debug, false);
 	}
 
 	@Override
-	public void buildQuery(String string, Integer add, Boolean finalize, Boolean debug, Boolean table) {
+	public void buildQuery(String string, Integer add, boolean finalize, boolean debug, boolean table) {
 		if(table)
 			string = string.replace("#__", prefix);
 		
@@ -389,7 +390,7 @@ public class hTwo implements iDriver {
 	}
 	
 	@Override
-	public iDriver where(HashMap<String, HashMap<String, String>> fields, Boolean shite) {
+	public iDriver where(HashMap<String, HashMap<String, String>> fields, boolean shite) {
 		if(fields.size() > 0) {
 			String SQL = "WHERE ";
 			int i = 0;
@@ -533,7 +534,7 @@ public class hTwo implements iDriver {
 	}
 	
 	@Override
-	public iDriver set(HashMap<String, HashMap<String, String>> fields, Boolean shite) {
+	public iDriver set(HashMap<String, HashMap<String, String>> fields, boolean shite) {
 		if(fields.size() > 0) {
 			String SQL = "SET ";
 			int i = 0;
@@ -593,9 +594,9 @@ public class hTwo implements iDriver {
 			String field = entry.getKey();
 			String t = "VARCHAR";
 			Integer length = 100;
-			Boolean NULL = false;
+			boolean NULL = false;
 			String def = "";
-			Boolean aincr = false;
+			boolean aincr = false;
 			
 			if(data.containsKey("TYPE")) {
 				t = data.get("TYPE");
@@ -666,7 +667,7 @@ public class hTwo implements iDriver {
 			String field = entry.getKey();
 			String t = "VARCHAR";
 			Integer length = 100;
-			Boolean NULL = false;
+			boolean NULL = false;
 			String def = "";
 			
 			if(data.containsKey("TYPE")) {
@@ -705,7 +706,7 @@ public class hTwo implements iDriver {
 	}
 	
 	@Override
-	public iDriver debug(Boolean dbg) {
+	public iDriver debug(boolean dbg) {
 		this.buildQuery("", true, false, dbg);
 		return this;
 	}
@@ -717,7 +718,7 @@ public class hTwo implements iDriver {
 	}
 	
 	@Override
-	public iDriver debugFinalize(Boolean dbg) {
+	public iDriver debugFinalize(boolean dbg) {
 		this.buildQuery("", true, true, dbg);
 		return this;
 	}
