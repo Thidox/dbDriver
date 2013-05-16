@@ -20,14 +20,22 @@ public class QueryResult {
 	}
 	
 	public QueryRow getRow() {
-		if(data.size() < pointer) {
-			
+		if(data.size() > pointer) {
 			QueryRow qR = new QueryRow(data.get(pointer));
 			pointer++;
 			return qR;
 		}
 		
 		pointer = 0;
+		return null;
+	}
+	
+	public QueryRow getRow(int point) {
+		if(data.size() > point) {
+			QueryRow qR = new QueryRow(data.get(point));
+			return qR;
+		}
+		
 		return null;
 	}
 	
@@ -43,6 +51,10 @@ public class QueryResult {
 		return this.size;
 	}
 	
+	public ArrayList<HashMap<String, String>> getRawData() {
+		return this.data;
+	}
+	
 	public class QueryRow {
 		
 		private HashMap<String, String> row;
@@ -52,16 +64,18 @@ public class QueryResult {
 		}
 		
 		public String getString(String key) {
-			if(row.containsKey(key)) {
-				return row.get(key);
+			if(row.containsKey(key.toLowerCase())) {
+				return row.get(key.toLowerCase());
 			}
 			
 			return null;
 		}
 		
 		public boolean getBoolean(String key) {
-			if(row.containsKey(key)) {
-				return Boolean.parseBoolean(row.get(key));
+			if(row.containsKey(key.toLowerCase())) {
+				//return Boolean.parseBoolean(row.get(key));
+				String v = row.get(key.toLowerCase());
+				return v.equalsIgnoreCase("true") || v.equals("1") || v.equals("yes") || v.equals("y");
 			}
 			
 			return false;
@@ -69,8 +83,8 @@ public class QueryResult {
 		
 		public int getInt(String key) {
 			try{
-				if(row.containsKey(key)) {
-					return Integer.parseInt(row.get(key));
+				if(row.containsKey(key.toLowerCase())) {
+					return Integer.parseInt(row.get(key.toLowerCase()));
 				}
 			}catch(NumberFormatException e) {
 				return 0;
@@ -81,8 +95,8 @@ public class QueryResult {
 		
 		public Integer getInteger(String key) {
 			try{
-				if(row.containsKey(key)) {
-					return Integer.valueOf(row.get(key));
+				if(row.containsKey(key.toLowerCase())) {
+					return Integer.valueOf(row.get(key.toLowerCase()));
 				}
 			}catch(NumberFormatException e) {
 				return 0;
@@ -93,8 +107,8 @@ public class QueryResult {
 		
 		public float getFloat(String key) {
 			try{
-				if(row.containsKey(key)) {
-					return Float.parseFloat(row.get(key));
+				if(row.containsKey(key.toLowerCase())) {
+					return Float.parseFloat(row.get(key.toLowerCase()));
 				}
 			}catch(NumberFormatException e) {
 				return 0F;
@@ -105,8 +119,8 @@ public class QueryResult {
 		
 		public double getDouble(String key) {
 			try{
-				if(row.containsKey(key)) {
-					return Double.parseDouble(row.get(key));
+				if(row.containsKey(key.toLowerCase())) {
+					return Double.parseDouble(row.get(key.toLowerCase()));
 				}
 			}catch(NumberFormatException e) {
 				return 0D;
@@ -117,8 +131,8 @@ public class QueryResult {
 		
 		public long getLong(String key) {
 			try{
-				if(row.containsKey(key)) {
-					return Long.parseLong(row.get(key));
+				if(row.containsKey(key.toLowerCase())) {
+					return Long.parseLong(row.get(key.toLowerCase()));
 				}
 			}catch(NumberFormatException e) {
 				return 0L;
