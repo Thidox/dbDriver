@@ -32,7 +32,7 @@ public class Database {
 	}
 	
 	private static HashMap<String, Database> instance = new HashMap<String, Database>();
-	private iDriver dbDriver;
+	private Driver dbDriver;
 	private dbType t;
 	
 	private Database(Plugin p, HashMap<String, String> conf, String instance) {
@@ -53,7 +53,7 @@ public class Database {
 		}
 	}
 	
-	public iDriver getEngine() {
+	public Driver getEngine() {
 		return this.dbDriver;
 	}
 	
