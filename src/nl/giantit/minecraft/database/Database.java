@@ -1,6 +1,6 @@
 package nl.giantit.minecraft.database;
 
-import nl.giantit.minecraft.database.drivers.MySQL;
+import nl.giantit.minecraft.database.drivers.mysql.MySQLDriver;
 import nl.giantit.minecraft.database.drivers.SQLite;
 import nl.giantit.minecraft.database.drivers.hTwo;
 
@@ -43,7 +43,7 @@ public class Database {
 		
 		if(d.equalsIgnoreCase("MySQL")) {
 			t = dbType.MySQL;
-			this.dbDriver = MySQL.Obtain(p, conf, instance);
+			this.dbDriver = MySQLDriver.Obtain(p, conf, instance);
 		}else if(d.equalsIgnoreCase("h2")) {
 			t = dbType.hTwo;
 			this.dbDriver = hTwo.Obtain(p, conf, instance);
