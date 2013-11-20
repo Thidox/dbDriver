@@ -1,7 +1,7 @@
 package nl.giantit.minecraft.database;
 
 import nl.giantit.minecraft.database.drivers.mysql.MySQLDriver;
-import nl.giantit.minecraft.database.drivers.SQLite;
+import nl.giantit.minecraft.database.drivers.sqlite.SQLiteDriver;
 import nl.giantit.minecraft.database.drivers.hTwo;
 
 import org.bukkit.plugin.Plugin;
@@ -49,7 +49,7 @@ public class Database {
 			this.dbDriver = hTwo.Obtain(p, conf, instance);
 		}else{
 			t = dbType.SQLite;
-			this.dbDriver = SQLite.Obtain(p, conf, instance);
+			this.dbDriver = SQLiteDriver.Obtain(p, conf, instance);
 		}
 	}
 	
