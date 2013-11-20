@@ -1,8 +1,8 @@
-package nl.giantit.minecraft.Database;
+package nl.giantit.minecraft.database;
 
-import nl.giantit.minecraft.Database.drivers.MySQL;
-import nl.giantit.minecraft.Database.drivers.SQLite;
-import nl.giantit.minecraft.Database.drivers.hTwo;
+import nl.giantit.minecraft.database.drivers.MySQL;
+import nl.giantit.minecraft.database.drivers.SQLite;
+import nl.giantit.minecraft.database.drivers.hTwo;
 
 import org.bukkit.plugin.Plugin;
 

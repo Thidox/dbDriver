@@ -1,4 +1,4 @@
-package nl.giantit.minecraft.Database;
+package nl.giantit.minecraft.database;
 
 import java.util.ArrayList;
 import java.util.HashMap;
