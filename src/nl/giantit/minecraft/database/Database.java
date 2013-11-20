@@ -2,7 +2,7 @@ package nl.giantit.minecraft.database;
 
 import nl.giantit.minecraft.database.drivers.mysql.MySQLDriver;
 import nl.giantit.minecraft.database.drivers.sqlite.SQLiteDriver;
-import nl.giantit.minecraft.database.drivers.hTwo;
+import nl.giantit.minecraft.database.drivers.h2.H2Driver;
 
 import org.bukkit.plugin.Plugin;
 
@@ -46,7 +46,7 @@ public class Database {
 			this.dbDriver = MySQLDriver.Obtain(p, conf, instance);
 		}else if(d.equalsIgnoreCase("h2")) {
 			t = dbType.hTwo;
-			this.dbDriver = hTwo.Obtain(p, conf, instance);
+			this.dbDriver = H2Driver.Obtain(p, conf, instance);
 		}else{
 			t = dbType.SQLite;
 			this.dbDriver = SQLiteDriver.Obtain(p, conf, instance);
