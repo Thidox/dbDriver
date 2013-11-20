@@ -4,6 +4,7 @@ import nl.giantit.minecraft.database.query.DeleteQuery;
 import nl.giantit.minecraft.database.query.InsertQuery;
 import nl.giantit.minecraft.database.query.Query;
 import nl.giantit.minecraft.database.query.SelectQuery;
+import nl.giantit.minecraft.database.query.TruncateQuery;
 import nl.giantit.minecraft.database.query.UpdateQuery;
 
 import org.bukkit.plugin.Plugin;
@@ -76,7 +77,7 @@ public interface Driver {
 	
 	public DeleteQuery delete(String table);
 	
-	public Driver Truncate(String table);
+	public TruncateQuery Truncate(String table);
 	
 	@Deprecated
 	public Driver create(String table);

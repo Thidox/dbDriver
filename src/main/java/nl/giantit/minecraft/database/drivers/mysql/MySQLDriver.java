@@ -7,6 +7,7 @@ import nl.giantit.minecraft.database.QueryResult;
 import nl.giantit.minecraft.database.query.DeleteQuery;
 import nl.giantit.minecraft.database.query.InsertQuery;
 import nl.giantit.minecraft.database.query.SelectQuery;
+import nl.giantit.minecraft.database.query.TruncateQuery;
 import nl.giantit.minecraft.database.query.UpdateQuery;
 
 import org.bukkit.plugin.Plugin;
@@ -381,11 +382,8 @@ public class MySQLDriver implements Driver {
 	}
 	
 	@Override
-	public Driver Truncate(String table) {
-		table = table.replace("#__", prefix);
-		this.buildQuery("TRUNCATE TABLE " + table + ";", false, false, false);
-		
-		return this;
+	public TruncateQuery Truncate(String table) {
+		return new MySQLTruncateQuery(this).setTable(table);
 	}
 
 	@Override
