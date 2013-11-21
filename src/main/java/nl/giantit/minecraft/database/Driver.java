@@ -2,6 +2,7 @@ package nl.giantit.minecraft.database;
 
 import nl.giantit.minecraft.database.query.CreateQuery;
 import nl.giantit.minecraft.database.query.DeleteQuery;
+import nl.giantit.minecraft.database.query.IndexQuery;
 import nl.giantit.minecraft.database.query.InsertQuery;
 import nl.giantit.minecraft.database.query.Query;
 import nl.giantit.minecraft.database.query.SelectQuery;
@@ -27,6 +28,7 @@ public interface Driver {
 		DELETE,
 		TRUNCATE,
 		CREATE,
+		INDEX,
 	}
 	
 	public void close();
@@ -82,6 +84,7 @@ public interface Driver {
 	
 	public CreateQuery create(String table);
 	
+	public IndexQuery createIndex(String index);
 
 	@Deprecated
 	public Driver alter(String table);

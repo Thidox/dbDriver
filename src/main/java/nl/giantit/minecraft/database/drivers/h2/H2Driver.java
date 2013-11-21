@@ -5,6 +5,7 @@ import nl.giantit.minecraft.database.Driver;
 import nl.giantit.minecraft.database.QueryResult;
 import nl.giantit.minecraft.database.query.CreateQuery;
 import nl.giantit.minecraft.database.query.DeleteQuery;
+import nl.giantit.minecraft.database.query.IndexQuery;
 import nl.giantit.minecraft.database.query.InsertQuery;
 import nl.giantit.minecraft.database.query.Query;
 import nl.giantit.minecraft.database.query.SelectQuery;
@@ -375,8 +376,10 @@ public class H2Driver implements Driver {
 	}
 	
 	@Override
+	public IndexQuery createIndex(String index) {
+		return new H2IndexQuery(this).setName(index);
 	}
-
+	
 	@Override
 	public Driver alter(String table) {
 		table = table.replace("#__", prefix);
