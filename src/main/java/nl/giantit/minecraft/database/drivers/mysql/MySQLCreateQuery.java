@@ -109,7 +109,7 @@ public class MySQLCreateQuery implements CreateQuery {
 			}
 			
 			if(null != P_KEY) {
-				sB.append("\n, PRIMARY KEY(");
+				sB.append(", \nPRIMARY KEY(");
 				sB.append(P_KEY);
 				sB.append(")");
 			}
@@ -119,7 +119,7 @@ public class MySQLCreateQuery implements CreateQuery {
 					fk.parse();
 				}
 				
-				sB.append("\n, CONSTRAINT ");
+				sB.append(", \nCONSTRAINT ");
 				sB.append(fk.getName());
 				sB.append(fk.getParsedFK());
 			}

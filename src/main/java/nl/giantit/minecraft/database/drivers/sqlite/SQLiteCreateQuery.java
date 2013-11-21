@@ -104,7 +104,7 @@ public class SQLiteCreateQuery implements CreateQuery {
 					fk.parse();
 				}
 				
-				sB.append("\n, CONSTRAINT ");
+				sB.append(", \nCONSTRAINT ");
 				sB.append(fk.getName());
 				sB.append(fk.getParsedFK());
 			}
