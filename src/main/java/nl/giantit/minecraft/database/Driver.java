@@ -1,5 +1,6 @@
 package nl.giantit.minecraft.database;
 
+import nl.giantit.minecraft.database.query.CreateQuery;
 import nl.giantit.minecraft.database.query.DeleteQuery;
 import nl.giantit.minecraft.database.query.InsertQuery;
 import nl.giantit.minecraft.database.query.Query;
@@ -25,7 +26,7 @@ public interface Driver {
 		INSERT,
 		DELETE,
 		TRUNCATE,
-		CREATE;
+		CREATE,
 	}
 	
 	public void close();
@@ -79,10 +80,8 @@ public interface Driver {
 	
 	public TruncateQuery Truncate(String table);
 	
-	@Deprecated
-	public Driver create(String table);
-	@Deprecated
-	public Driver fields(HashMap<String, HashMap<String, String>> fields);
+	public CreateQuery create(String table);
+	
 
 	@Deprecated
 	public Driver alter(String table);

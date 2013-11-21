@@ -3,6 +3,7 @@ package nl.giantit.minecraft.database.drivers.h2;
 import nl.giantit.minecraft.database.DatabaseType;
 import nl.giantit.minecraft.database.Driver;
 import nl.giantit.minecraft.database.QueryResult;
+import nl.giantit.minecraft.database.query.CreateQuery;
 import nl.giantit.minecraft.database.query.DeleteQuery;
 import nl.giantit.minecraft.database.query.InsertQuery;
 import nl.giantit.minecraft.database.query.Query;
@@ -366,81 +367,14 @@ public class H2Driver implements Driver {
 	public TruncateQuery Truncate(String table) {
 		return new H2TruncateQuery(this).setTable(table);
 	}
+	
 
 	@Override
-	public Driver create(String table) {
-		table = table.replace("#__", prefix);
-		this.buildQuery("CREATE TABLE " + table + "\n", false, false, false);
-		
-		return this;
+	public CreateQuery create(String table) {
+		return new H2CreateQuery(this).create(table);
 	}
 	
 	@Override
-	public Driver fields(HashMap<String, HashMap<String, String>> fields) {
-		String P_KEY = "";
-		this.buildQuery("(", true, false, false);
-		
-		int i = 0;
-		for(Map.Entry<String, HashMap<String, String>> entry : fields.entrySet()) {
-			i++;
-			HashMap<String, String> data = entry.getValue();
-			
-			String field = entry.getKey();
-			String t = "VARCHAR";
-			Integer length = 100;
-			boolean NULL = false;
-			String def = "";
-			boolean aincr = false;
-			
-			if(data.containsKey("TYPE")) {
-				t = data.get("TYPE");
-			}
-			
-			if(data.containsKey("LENGTH")) {
-				if(null != data.get("LENGTH")) {
-					try{
-						length = Integer.parseInt(data.get("LENGTH"));
-						length = length < 0 ? 100 : length;
-					}catch(NumberFormatException e) {}
-				}else
-					length = null;
-			}
-			
-			if(data.containsKey("NULL")) {
-				NULL = Boolean.parseBoolean(data.get("NULL"));
-			}
-			
-			if(data.containsKey("DEFAULT")) {
-				def = data.get("DEFAULT");
-			}
-			
-			if(data.containsKey("A_INCR")) {
-				aincr = Boolean.parseBoolean(data.get("A_INCR"));
-			}
-			
-			if(data.containsKey("P_KEY")) {
-				if(Boolean.parseBoolean(data.get("P_KEY"))) {
-					P_KEY = field;
-				}
-			}
-			
-			if(length != null)
-				t += "(" + length + ")";
-			
-			String n = (!NULL) ? " NOT NULL" : " DEFAULT NULL";
-			String d = (!def.equalsIgnoreCase("")) ? " DEFAULT " + def : ""; 
-			String a = (aincr) ? " AUTO_INCREMENT" : "";
-			String c = (i < fields.size()) ? ",\n" : ""; 
-			
-			this.buildQuery(field + " " + t + n + d + a + c, true);
-		}
-		
-		if(!P_KEY.equalsIgnoreCase(""))
-			this.buildQuery("\n, PRIMARY KEY(" + P_KEY + ")", true, false, false);
-		
-		this.buildQuery(");", true, false, false);
-		
-		return this;
 	}
 
 	@Override
