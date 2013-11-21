@@ -133,7 +133,7 @@ public class MySQLColumn implements Column {
 			}
 			
 			if(this.A_INCR) {
-				sB.append(" AUTOINCREMENT ");
+				sB.append(" AUTO_INCREMENT ");
 			}
 			
 			this.field = sB.toString();
