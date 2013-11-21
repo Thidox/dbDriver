@@ -115,7 +115,7 @@ public class SQLiteInsertQuery implements InsertQuery {
 			
 			for(int i = 0; i < this.values.size(); ++i) {
 				if(i > 0) {
-					sB.append(" UNION SELECT ");
+					sB.append(" UNION ALL SELECT ");
 				}
 				
 				Map<String, Elem> vM = this.values.get(i);
