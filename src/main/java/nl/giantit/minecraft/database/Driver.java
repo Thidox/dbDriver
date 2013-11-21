@@ -40,18 +40,9 @@ public interface Driver {
 	
 	public boolean tableExists(String table);
 	
-	
-	@Deprecated
-	public QueryResult execQuery();
-	@Deprecated
-	public QueryResult execQuery(Integer queryID);
 	public QueryResult execQuery(Query q);
 	
-	@Deprecated
-	public void updateQuery();
-	@Deprecated
-	public void updateQuery(Integer queryID);
-	public void updateQuery(Query q);
+	public QueryResult updateQuery(Query q);
 	
 	public SelectQuery select(String f);
 	public SelectQuery select(String... fields);
