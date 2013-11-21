@@ -4,6 +4,7 @@ import nl.giantit.minecraft.database.Driver;
 import nl.giantit.minecraft.database.DatabaseType;
 import nl.giantit.minecraft.database.query.Query;
 import nl.giantit.minecraft.database.QueryResult;
+import nl.giantit.minecraft.database.query.AlterQuery;
 import nl.giantit.minecraft.database.query.CreateQuery;
 import nl.giantit.minecraft.database.query.DeleteQuery;
 import nl.giantit.minecraft.database.query.IndexQuery;
@@ -399,59 +400,11 @@ public class MySQLDriver implements Driver {
 	}
 	
 	@Override
-	public Driver alter(String table) {
-		table = table.replace("#__", prefix);
-		this.buildQuery("ALTER TABLE " + table + "\n", false, false, false);
-		
-		return this;
+	public AlterQuery alter(String table) {
+		return new MySQLAlterQuery(this).setTable(table);
 	}
 	
 	@Override
-	public Driver add(HashMap<String, HashMap<String, String>> fields) {
-		int i = 0;
-		for(Map.Entry<String, HashMap<String, String>> entry : fields.entrySet()) {
-			i++;
-			HashMap<String, String> data = entry.getValue();
-			
-			String field = entry.getKey();
-			String t = "VARCHAR";
-			Integer length = 100;
-			boolean NULL = false;
-			String def = "";
-			
-			if(data.containsKey("TYPE")) {
-				t = data.get("TYPE");
-			}
-			
-			if(data.containsKey("LENGTH")) {
-				if(null != data.get("LENGTH")) {
-					try{
-						length = Integer.parseInt(data.get("LENGTH"));
-						length = length < 0 ? 100 : length;
-					}catch(NumberFormatException e) {}
-				}else
-					length = null;
-			}
-			
-			if(data.containsKey("NULL")) {
-				NULL = Boolean.parseBoolean(data.get("NULL"));
-			}
-			
-			if(data.containsKey("DEFAULT")) {
-				def = data.get("DEFAULT");
-			}
-			
-			if(length != null)
-				t += "(" + length + ")";
-			
-			String n = (!NULL) ? " NOT NULL" : " DEFAULT NULL";
-			String d = (!def.equalsIgnoreCase("")) ? " DEFAULT " + def : "";
-			String c = (i < fields.size()) ? ",\n" : ""; 
-			
-			this.buildQuery("ADD " + field + " " + t + n + d + c, true);
-		}
-		
-		return this;
 	}
 	
 	@Override

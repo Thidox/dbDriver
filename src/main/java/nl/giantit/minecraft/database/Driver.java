@@ -1,5 +1,6 @@
 package nl.giantit.minecraft.database;
 
+import nl.giantit.minecraft.database.query.AlterQuery;
 import nl.giantit.minecraft.database.query.CreateQuery;
 import nl.giantit.minecraft.database.query.DeleteQuery;
 import nl.giantit.minecraft.database.query.IndexQuery;
@@ -11,7 +12,6 @@ import nl.giantit.minecraft.database.query.UpdateQuery;
 
 import org.bukkit.plugin.Plugin;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +29,7 @@ public interface Driver {
 		TRUNCATE,
 		CREATE,
 		INDEX,
+		ALTER,
 	}
 	
 	public void close();
@@ -86,10 +87,7 @@ public interface Driver {
 	
 	public IndexQuery createIndex(String index);
 
-	@Deprecated
-	public Driver alter(String table);
-	@Deprecated
-	public Driver add(HashMap<String, HashMap<String, String>> fields);
+	public AlterQuery alter(String table);
 	
 	public String getPrefix();
 	
