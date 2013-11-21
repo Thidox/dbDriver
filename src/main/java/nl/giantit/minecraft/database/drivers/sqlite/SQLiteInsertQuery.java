@@ -83,6 +83,8 @@ public class SQLiteInsertQuery implements InsertQuery {
 			
 			Map<String, Elem> row = this.values.get(this.values.size() - 1);
 			Elem e = new Elem(value, vT);
+			
+			row.put(field, e);
 		}
 		
 		return this;
