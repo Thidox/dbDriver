@@ -112,7 +112,7 @@ public class H2IndexQuery implements IndexQuery {
 			this.db.getPlugin().getLogger().info(this.index);
 		}
 		
-		return this.db.execQuery(this);
+		return this.db.updateQuery(this);
 	}
 	
 	@Override

@@ -125,7 +125,7 @@ public class H2AlterQuery implements AlterQuery {
 			this.db.getPlugin().getLogger().info(this.query);
 		}
 		
-		return this.db.execQuery(this);
+		return this.db.updateQuery(this);
 	}
 	
 	@Override

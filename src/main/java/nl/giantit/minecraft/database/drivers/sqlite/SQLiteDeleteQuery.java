@@ -143,7 +143,7 @@ public class SQLiteDeleteQuery implements DeleteQuery {
 			this.db.getPlugin().getLogger().info(this.query);
 		}
 		
-		return this.db.execQuery(this);
+		return this.db.updateQuery(this);
 	}
 	
 	@Override

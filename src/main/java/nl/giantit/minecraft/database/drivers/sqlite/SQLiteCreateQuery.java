@@ -143,14 +143,14 @@ public class SQLiteCreateQuery implements CreateQuery {
 			this.db.getPlugin().getLogger().info(this.query);
 		}
 		
-		/*QueryResult QR = this.db.execQuery(this);
+		/*QueryResult QR = this.db.updateQuery(this);
 		
 		for(IndexQuery i : this.ind) {
 			i.exec(debug);
 		}
 		
 		return QR;*/
-		return this.db.execQuery(this);
+		return this.db.updateQuery(this);
 	}
 	
 	@Override

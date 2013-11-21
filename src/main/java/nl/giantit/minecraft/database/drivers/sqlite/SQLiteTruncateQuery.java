@@ -74,7 +74,7 @@ public class SQLiteTruncateQuery implements TruncateQuery {
 			this.db.getPlugin().getLogger().info(this.query);
 		}
 		
-		return this.db.execQuery(this);
+		return this.db.updateQuery(this);
 	}
 	
 	@Override

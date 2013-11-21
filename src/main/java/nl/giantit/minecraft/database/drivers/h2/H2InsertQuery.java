@@ -174,7 +174,7 @@ public class H2InsertQuery implements InsertQuery {
 			this.db.getPlugin().getLogger().info(this.query);
 		}
 		
-		return this.db.execQuery(this);
+		return this.db.updateQuery(this);
 	}
 	
 	@Override

@@ -143,7 +143,7 @@ public class H2DeleteQuery implements DeleteQuery {
 			this.db.getPlugin().getLogger().info(this.query);
 		}
 		
-		return this.db.execQuery(this);
+		return this.db.updateQuery(this);
 	}
 	
 	@Override
