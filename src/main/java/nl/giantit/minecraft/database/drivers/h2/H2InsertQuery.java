@@ -119,9 +119,9 @@ public class H2InsertQuery implements InsertQuery {
 				sB.append("(");
 				Map<String, Elem> vM = this.values.get(i);
 				for(int a = 0; a < this.fields.size(); ++a) {
-					String f = this.fields.get(i);
+					String f = this.fields.get(a);
 					
-					if(i > 0) {
+					if(a > 0) {
 						sB.append(", ");
 					}
 					
