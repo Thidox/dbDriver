@@ -37,6 +37,10 @@ public class H2Column implements Column {
 
 	@Override
 	public Column setDataType(DataType t) {
+		if(t == DataType.DATETIME) {
+			t = DataType.TIMESTAMP;
+		}
+		
 		this.t = t;
 
 		return this;
