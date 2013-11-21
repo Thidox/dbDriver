@@ -295,7 +295,13 @@ public class SQLiteDriver implements Driver {
 			case TRUNCATE:
 				return new SQLiteTruncateQuery(this);
 			case CREATE:
-				break;
+				return new SQLiteCreateQuery(this);
+			case INDEX:
+				return new SQLiteIndexQuery(this);
+			case ALTER:
+				return new SQLiteAlterQuery(this);
+			case DROP:
+				return new SQLiteDropQuery(this);
 		}
 		
 		return null;

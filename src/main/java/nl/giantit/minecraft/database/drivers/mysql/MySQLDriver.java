@@ -310,7 +310,13 @@ public class MySQLDriver implements Driver {
 			case TRUNCATE:
 				return new MySQLTruncateQuery(this);
 			case CREATE:
-				break;
+				return new MySQLCreateQuery(this);
+			case INDEX:
+				return new MySQLIndexQuery(this);
+			case ALTER:
+				return new MySQLAlterQuery(this);
+			case DROP:
+				return new MySQLDropQuery(this);
 		}
 		
 		return null;

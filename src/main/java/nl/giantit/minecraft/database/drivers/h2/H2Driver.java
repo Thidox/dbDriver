@@ -296,7 +296,13 @@ public class H2Driver implements Driver {
 			case TRUNCATE:
 				return new H2TruncateQuery(this);
 			case CREATE:
-				break;
+				return new H2CreateQuery(this);
+			case INDEX:
+				return new H2IndexQuery(this);
+			case ALTER:
+				return new H2AlterQuery(this);
+			case DROP:
+				return new H2DropQuery(this);
 		}
 		
 		return null;
