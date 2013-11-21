@@ -81,6 +81,10 @@ public class SQLiteInsertQuery implements InsertQuery {
 				this.addRow();
 			}
 			
+			if(value.toLowerCase().equals("now()")) {
+				value = "DATETIME()";
+			}
+			
 			Map<String, Elem> row = this.values.get(this.values.size() - 1);
 			Elem e = new Elem(value, vT);
 			

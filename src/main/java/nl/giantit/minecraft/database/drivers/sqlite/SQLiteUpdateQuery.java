@@ -43,6 +43,10 @@ public class SQLiteUpdateQuery implements UpdateQuery {
 	
 	@Override
 	public UpdateQuery set(String field, String value, ValueType vT) {
+		if(value.toLowerCase().equals("now()")) {
+			value = "DATETIME()";
+		}
+		
 		Elem e = new Elem(field, value, vT);
 		this.set.add(e);
 		
