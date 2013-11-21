@@ -40,25 +40,6 @@ public interface Driver {
 	
 	public boolean tableExists(String table);
 	
-	@Deprecated
-	public void buildQuery(String string);
-	@Deprecated
-	public void buildQuery(String string, boolean add);
-	@Deprecated
-	public void buildQuery(String string, boolean add, boolean finalize);
-	@Deprecated
-	public void buildQuery(String string, boolean add, boolean finalize, boolean debug);
-	@Deprecated
-	public void buildQuery(String string, boolean add, boolean finalize, boolean debug, boolean table);
-	
-	@Deprecated
-	public void buildQuery(String string, Integer add);
-	@Deprecated
-	public void buildQuery(String string, Integer add, boolean finalize);
-	@Deprecated
-	public void buildQuery(String string, Integer add, boolean finalize, boolean debug);
-	@Deprecated
-	public void buildQuery(String string, Integer add, boolean finalize, boolean debug, boolean table);
 	
 	@Deprecated
 	public QueryResult execQuery();

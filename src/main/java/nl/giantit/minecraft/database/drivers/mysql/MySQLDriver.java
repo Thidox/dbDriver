@@ -142,95 +142,9 @@ public class MySQLDriver implements Driver {
 	}
 	
 	@Override
-	public void buildQuery(String string) {
-		this.buildQuery(string, false, false, false);
-	}
-	
-	@Override
-	public void buildQuery(String string, boolean add) {
-		this.buildQuery(string, add, false, false);
-	}
-	
-	@Override
-	public void buildQuery(String string, boolean add, boolean finalize) {
-		this.buildQuery(string, add, finalize, false);
-	}
-	
-	
-	@Override
-	public void buildQuery(String string, boolean add, boolean finalize, boolean debug) {
-		this.buildQuery(string, add, finalize, debug, false);
-	}
-	
-	@Override
-	public void buildQuery(String string, boolean add, boolean finalize, boolean debug, boolean table) {
-		if(!add) {
-			if(table)
-				string = string.replace("#__", prefix);
-			
-			HashMap<String, String> ad = new HashMap<String, String>();
-			ad.put("sql", string);
-			
-			if(finalize)
-				ad.put("finalize", "true");
-			
-			if(debug)
-				ad.put("debug", "true");
-			
-			sql.add(ad);
-		}else{
-			int last = sql.size() - 1;
-			
-			this.buildQuery(string, last, finalize, debug, table);
-		}
-	}
-	
-	@Override
-	public void buildQuery(String string, Integer add) {
-		this.buildQuery(string, add, false, false);
-	}
-	
-	@Override
-	public void buildQuery(String string, Integer add, boolean finalize) {
-		this.buildQuery(string, add, finalize, false);
-	}
-	
-	@Override
-	public void buildQuery(String string, Integer add, boolean finalize, boolean debug) {
-		this.buildQuery(string, add, finalize, debug, false);
-	}
-	
-	@Override
-	public void buildQuery(String string, Integer add, boolean finalize, boolean debug, boolean table) {
-		if(table)
-			string = string.replace("#__", prefix);
 		
-		try {
-			HashMap<String, String> SQL = sql.get(add);
-			if(SQL.containsKey("sql")) {
-				if(SQL.containsKey("finalize")) {
-					if(true == debug)
-						plugin.getLogger().log(Level.SEVERE, "SQL syntax is finalized!");
-					return;
-				}else{
-					SQL.put("sql", SQL.get("sql") + string);
-					
-					if(true == finalize)
-						SQL.put("finalize", "true");
-
-					sql.add(add, SQL);
-				}
-			}else
-				if(true == debug)
-					plugin.getLogger().log(Level.SEVERE, add.toString() + " is not a valid SQL query!");
 		
-			if(debug == true)
-				plugin.getLogger().log(Level.INFO, sql.get(add).get("sql"));
-		}catch(NullPointerException e) {
-			if(true == debug)
-				plugin.getLogger().log(Level.SEVERE, "Query " + add + " could not be found!");
 		}
-	}
 	
 	@Override
 	public QueryResult execQuery() {
