@@ -219,6 +219,7 @@ public class H2SelectQuery implements SelectQuery {
 			}
 			
 			if(this.where.size() > 0) {
+				sB.append(" WHERE ");
 				Iterator<Group> whereIterator = this.where.iterator();
 				while(whereIterator.hasNext()) {
 					Group g = whereIterator.next();
@@ -226,6 +227,7 @@ public class H2SelectQuery implements SelectQuery {
 						g.parse();
 					}
 					
+					sB.append(g.getType().getTextual());
 					sB.append(g.getParsedGroup());
 				}
 			

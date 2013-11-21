@@ -130,6 +130,7 @@ public class H2UpdateQuery implements UpdateQuery {
 			sB.append("\n");
 			
 			if(this.where.size() > 0) {
+				sB.append(" WHERE ");
 				Iterator<Group> whereIterator = this.where.iterator();
 				while(whereIterator.hasNext()) {
 					Group g = whereIterator.next();
@@ -137,6 +138,7 @@ public class H2UpdateQuery implements UpdateQuery {
 						g.parse();
 					}
 					
+					sB.append(g.getType().getTextual());
 					sB.append(g.getParsedGroup());
 				}
 			
