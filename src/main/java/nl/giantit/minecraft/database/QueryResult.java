@@ -11,12 +11,17 @@ public class QueryResult {
 	
 	private int pointer = 0;
 	private int size;
+	private boolean hasResult = true;
 	private ArrayList<HashMap<String, String>> data;
 	
 	private QueryResult(ArrayList<HashMap<String, String>> data) {
 		this.pointer = 0;
 		this.data = data;
 		this.size = data.size();
+	}
+	
+	private QueryResult() {
+		this.hasResult = false;
 	}
 	
 	public QueryRow getRow() {
@@ -53,6 +58,10 @@ public class QueryResult {
 	
 	public ArrayList<HashMap<String, String>> getRawData() {
 		return this.data;
+	}
+	
+	public boolean hasResultSet() {
+		return this.hasResult;
 	}
 	
 	public class QueryRow {
@@ -145,6 +154,10 @@ public class QueryResult {
 	
 	public static QueryResult QR(ArrayList<HashMap<String, String>> data) {
 		return new QueryResult(data);
+	}
+	
+	public static QueryResult QR() {
+		return new QueryResult();
 	}
 	
 }
