@@ -107,7 +107,7 @@ public class H2Column implements Column {
 
 			String type = this.t.getTextual();
 
-			if(this.t != DataType.RAW) {
+			if(this.t == DataType.RAW) {
 				sB.append(type.replace("%1", this.data));
 			}else if(null != this.length) {
 				sB.append(type.replace("%1", String.valueOf(this.length.intValue())));
