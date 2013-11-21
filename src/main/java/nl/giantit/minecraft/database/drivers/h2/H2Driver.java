@@ -251,7 +251,6 @@ public class H2Driver implements Driver {
 		return new H2TruncateQuery(this).setTable(table);
 	}
 	
-
 	@Override
 	public CreateQuery create(String table) {
 		return new H2CreateQuery(this).create(table);

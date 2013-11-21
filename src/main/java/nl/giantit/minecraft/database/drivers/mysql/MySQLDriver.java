@@ -243,8 +243,6 @@ public class MySQLDriver implements Driver {
 	
 	@Override
 	public UpdateQuery update(String table) {
-		/*table = table.replace("#__", prefix);
-		this.buildQuery("UPDATE " + table + " \n", false, false, false);*/
 		UpdateQuery uQ = new MySQLUpdateQuery(this);
 		uQ.setTable(table);
 		
