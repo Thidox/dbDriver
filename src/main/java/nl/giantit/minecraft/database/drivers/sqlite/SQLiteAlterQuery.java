@@ -72,7 +72,7 @@ public class SQLiteAlterQuery implements AlterQuery {
 				sB.append(" RENAME TO ");
 				sB.append(this.renTo.replace("#__", this.db.getPrefix()));
 			}else{
-				sB.append(" ADD (");
+				sB.append(" ADD ");
 				int i = 0;
 				for(Column c : this.cL) {
 					if(!c.isParsed()) {
@@ -88,7 +88,7 @@ public class SQLiteAlterQuery implements AlterQuery {
 					sB.append(c.getParsedColumn());
 				}
 				
-				sB.append(")");
+				sB.append(" ");
 			}
 			
 			sB.append(";");
