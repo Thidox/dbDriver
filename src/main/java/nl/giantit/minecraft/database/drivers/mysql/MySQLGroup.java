@@ -59,6 +59,12 @@ public class MySQLGroup implements Group {
 	
 	@Override
 	public Group add(Type t, String field, String value, ValueType vT) {
+		if(this.elems.isEmpty()) {
+			t = Type.PRIMARY;
+		}else if(t == Type.PRIMARY) {
+			t = Type.AND;
+		}
+		
 		Elem e = new Elem(t, field, value, vT);
 		elems.add(e);
 		
@@ -67,6 +73,12 @@ public class MySQLGroup implements Group {
 	
 	@Override
 	public Group add(Group g) {
+		if(this.elems.isEmpty()) {
+			g.setType(Type.PRIMARY);
+		}else if(g.getType() == Type.PRIMARY) {
+			g.setType(Type.AND);
+		}
+		
 		this.elems.add(g);
 		
 		return this;
