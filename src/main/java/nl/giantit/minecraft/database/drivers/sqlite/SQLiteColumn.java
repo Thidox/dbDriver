@@ -112,6 +112,8 @@ public class SQLiteColumn implements Column {
 				sB.append(type.replace("%1", this.data));
 			}else if(null != this.length) {
 				sB.append(type.replace("%1", String.valueOf(this.length.intValue())));
+			}else{
+				sB.append(type);
 			}
 			
 			if(this.n) {
