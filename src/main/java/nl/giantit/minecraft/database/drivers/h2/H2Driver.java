@@ -6,6 +6,7 @@ import nl.giantit.minecraft.database.QueryResult;
 import nl.giantit.minecraft.database.query.AlterQuery;
 import nl.giantit.minecraft.database.query.CreateQuery;
 import nl.giantit.minecraft.database.query.DeleteQuery;
+import nl.giantit.minecraft.database.query.DropQuery;
 import nl.giantit.minecraft.database.query.IndexQuery;
 import nl.giantit.minecraft.database.query.InsertQuery;
 import nl.giantit.minecraft.database.query.Query;
@@ -387,6 +388,8 @@ public class H2Driver implements Driver {
 	}
 	
 	@Override
+	public DropQuery drop(String table) {
+		return new H2DropQuery(this).setTable(table);
 	}
 	
 	@Override

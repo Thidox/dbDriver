@@ -3,6 +3,7 @@ package nl.giantit.minecraft.database;
 import nl.giantit.minecraft.database.query.AlterQuery;
 import nl.giantit.minecraft.database.query.CreateQuery;
 import nl.giantit.minecraft.database.query.DeleteQuery;
+import nl.giantit.minecraft.database.query.DropQuery;
 import nl.giantit.minecraft.database.query.IndexQuery;
 import nl.giantit.minecraft.database.query.InsertQuery;
 import nl.giantit.minecraft.database.query.Query;
@@ -30,6 +31,7 @@ public interface Driver {
 		CREATE,
 		INDEX,
 		ALTER,
+		DROP;
 	}
 	
 	public void close();
@@ -88,6 +90,8 @@ public interface Driver {
 	public IndexQuery createIndex(String index);
 
 	public AlterQuery alter(String table);
+	
+	public DropQuery drop(String table);
 	
 	public String getPrefix();
 	
