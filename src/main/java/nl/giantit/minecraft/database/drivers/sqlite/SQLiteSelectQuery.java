@@ -245,6 +245,7 @@ public class SQLiteSelectQuery implements SelectQuery {
 						++a;
 					}
 					sB.append(entry.getKey().replace("#__", this.db.getPrefix()));
+					sB.append(" ");
 					sB.append(entry.getValue().getValue());
 				}
 			
