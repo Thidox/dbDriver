@@ -4,7 +4,7 @@
 
 	<groupId>nl.giantit.minecraft</groupId>
 	<artifactId>dbDriver</artifactId>
-	<version>1.4.DEV-SNAPSHOT</version>
+	<version>1.3.1</version>
 	<packaging>jar</packaging>
 
 	<name>dbDriver</name>
