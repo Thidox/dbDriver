@@ -82,7 +82,8 @@ public class H2UpdateQuery implements UpdateQuery {
 	@Override
 	public Group where(Group.Type t, String field, String value, Group.ValueType vT) {
 		Group g = new H2Group(this.db);
-		g.add(t, field, value, vT);
+		g.setType(t);
+		g.add(field, value, vT);
 		
 		return this.where(g);
 	}

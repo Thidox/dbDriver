@@ -131,7 +131,8 @@ public class MySQLSelectQuery implements SelectQuery {
 	@Override
 	public Group where(Group.Type t, String field, String value, Group.ValueType vT) {
 		Group g = new MySQLGroup(this.db);
-		g.add(t, field, value, vT);
+		g.setType(t);
+		g.add(field, value, vT);
 		
 		return this.where(g);
 	}
