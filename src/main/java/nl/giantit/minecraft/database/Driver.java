@@ -44,7 +44,6 @@ public interface Driver {
 	
 	public QueryResult updateQuery(Query q);
 	
-	public SelectQuery select(String f);
 	public SelectQuery select(String... fields);
 	public SelectQuery select(List<String> fields);
 	public SelectQuery select(Map<String, String> fields);

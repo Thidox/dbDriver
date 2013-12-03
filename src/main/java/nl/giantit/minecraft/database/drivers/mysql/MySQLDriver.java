@@ -218,12 +218,6 @@ public class MySQLDriver implements Driver {
 	}
 	
 	@Override
-	public SelectQuery select(String f) {
-		SelectQuery sQ = new MySQLSelectQuery(this);
-		return sQ.select(f);
-	}
-	
-	@Override
 	public SelectQuery select(String... fields) {
 		SelectQuery sQ = new MySQLSelectQuery(this);
 		return sQ.select(fields);

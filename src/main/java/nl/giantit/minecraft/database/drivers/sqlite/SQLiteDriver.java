@@ -208,12 +208,6 @@ public class SQLiteDriver implements Driver {
 	}
 	
 	@Override
-	public SelectQuery select(String f) {
-		SelectQuery sQ = new SQLiteSelectQuery(this);
-		return sQ.select(f);
-	}
-	
-	@Override
 	public SelectQuery select(String... fields) {
 		SelectQuery sQ = new SQLiteSelectQuery(this);
 		return sQ.select(fields);
