@@ -4,7 +4,7 @@ import nl.giantit.minecraft.database.drivers.mysql.MySQLDriver;
 import nl.giantit.minecraft.database.drivers.sqlite.SQLiteDriver;
 import nl.giantit.minecraft.database.drivers.h2.H2Driver;
 
-import org.bukkit.plugin.Plugin;
+import net.md_5.bungee.api.plugin.Plugin;
 
 import java.util.HashMap;
 

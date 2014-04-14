@@ -14,7 +14,7 @@ import nl.giantit.minecraft.database.query.SelectQuery;
 import nl.giantit.minecraft.database.query.TruncateQuery;
 import nl.giantit.minecraft.database.query.UpdateQuery;
 
-import org.bukkit.plugin.Plugin;
+import net.md_5.bungee.api.plugin.Plugin;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;

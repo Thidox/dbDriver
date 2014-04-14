@@ -4,7 +4,7 @@
 
 	<groupId>nl.giantit.minecraft</groupId>
 	<artifactId>dbDriver</artifactId>
-	<version>1.4.DEV-SNAPSHOT</version>
+	<version>1.4.DEV-BUNGEE-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>dbDriver</name>
@@ -39,8 +39,8 @@
 	
 	<repositories>
 		<repository>
-			<id>bukkit-repo</id>
-			<url>http://repo.bukkit.org/content/groups/public/</url>
+			<id>sonatype-oss-public</id>
+			<url>https://oss.sonatype.org/content/groups/public/</url>
 		</repository>
 		<repository>
 			<id>nexusThirdParty</id>
@@ -158,11 +158,11 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
-			<version>1.6.2-R1.0</version>
+			<groupId>net.md-5</groupId>
+			<artifactId>bungeecord-api</artifactId>
+			<version>1.7-SNAPSHOT</version>
 			<type>jar</type>
-			<scope>compile</scope>
+			<scope>provided</scope>
 		</dependency>
 		<!-- /GENERAL -->
 	</dependencies>
