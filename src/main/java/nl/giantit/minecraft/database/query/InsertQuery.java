@@ -43,8 +43,6 @@ public interface InsertQuery extends Query {
 	}
 
 	public InsertQuery into(String table);
-	
-	public InsertQuery addField(String field);
 	public InsertQuery addFields(String... fields);
 	public InsertQuery addFields(List<String> fields);
 	

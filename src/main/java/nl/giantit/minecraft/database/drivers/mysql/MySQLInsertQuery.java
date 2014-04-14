@@ -41,11 +41,6 @@ public class MySQLInsertQuery implements InsertQuery {
 	}
 	
 	@Override
-	public InsertQuery addField(String field) {
-		return this.addFields(field);
-	}
-	
-	@Override
 	public InsertQuery addFields(String... fields) {
 		return this.addFields(Arrays.asList(fields));
 	}
